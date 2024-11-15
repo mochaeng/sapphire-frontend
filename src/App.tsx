@@ -1,6 +1,5 @@
 import "./App.css";
 import AuthPanel from "./components/auth/AuthPanel";
-import Header from "./components/header";
 
 function App() {
   return (

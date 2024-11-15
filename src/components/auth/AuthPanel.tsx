@@ -1,32 +1,116 @@
-import { Input } from "../ui/input";
+import { cn } from "@/lib/utils";
+import SigninForm from "./SigninForm";
+import SignupForm from "./SignupForm";
+import { Button } from "../ui/button";
+import { useState } from "react";
+import useInputForm from "../hooks/useInput";
+import {
+  isValidEmail,
+  isValidName,
+  isValidPassword,
+  isValidUsername,
+} from "@/lib/authValidation";
 
 function AuthPanel() {
+  const [isLogin, setIsLogin] = useState(true);
+  const emailInput = useInputForm("", isValidEmail);
+  const passwordInput = useInputForm("", isValidPassword);
+  const nameInput = useInputForm("", isValidName);
+  const usernameInput = useInputForm("", isValidUsername);
+
+  let title = "Log in";
+  if (!isLogin) {
+    title = "Create your account";
+  }
+
+  const handleOpenSignup = () => {
+    setIsLogin(false);
+  };
+
+  const handleOpenLogin = () => {
+    setIsLogin(true);
+  };
+
   return (
-    <div className="flex w-full items-center justify-center bg-blue-400">
-      <div className="grid w-full max-w-[1080px] grid-cols-1 gap-6">
+    <div className="lg-1:pb-16 lg-1:pt-16 relative flex w-full items-center justify-center pt-5">
+      <div className="lg-1:grid-cols-2 grid w-full max-w-[1080px] grid-cols-1 gap-6">
+        <HalfColorScreen className="lg-1:block hidden bg-primary" />
         <section className="flex justify-center">
-          <div className="max-w-authForm w-full">
+          <div className="max-w-authForm lg-1:text-white w-full">
             <p className="text-4xl">Sapphire</p>
             <p className="text-2xl">Community with Purpose</p>
           </div>
         </section>
-        <section className="flex justify-center">
+        <section className="flex flex-col items-center justify-center gap-2">
           <div className="max-w-authForm w-full">
-            <p className="mb-4 font-semibold">Log in</p>
-            <form className="flex flex-col gap-2">
-              <div>
-                <label htmlFor="email">Email</label>
-                <Input name="email" type="email" />
-              </div>
-              <div>
-                <label htmlFor="password">Password</label>
-                <Input name="password" type="password" />
-              </div>
-            </form>
+            <p className="mb-4 font-semibold">{title}</p>
           </div>
+          {isLogin ? (
+            <SigninForm
+              emailInput={emailInput}
+              passwordInput={passwordInput}
+              className="max-w-authForm"
+            />
+          ) : (
+            <SignupForm
+              nameInput={nameInput}
+              usernameInput={usernameInput}
+              emailInput={emailInput}
+              passwordInput={passwordInput}
+              className="max-w-authForm"
+            />
+          )}
+          <AuxPanel
+            onOpenLogin={handleOpenLogin}
+            onOpenSignup={handleOpenSignup}
+            isLogin={isLogin}
+          />
         </section>
       </div>
     </div>
+  );
+}
+
+function AuxPanel({
+  isLogin,
+  onOpenSignup,
+  onOpenLogin,
+}: {
+  isLogin: boolean;
+  onOpenSignup: () => void;
+  onOpenLogin: () => void;
+}) {
+  const loginHelpers = (
+    <div>
+      <Button variant={"link"}>Forgot password?</Button>
+      <span className="w-4 text-secondaryOnly">&#xb7;</span>
+      <Button onClick={onOpenSignup} variant={"link"}>
+        Sign up for Sapphire
+      </Button>
+    </div>
+  );
+
+  const signUpHelpers = (
+    <div className="flex items-center justify-center">
+      <p>Already have an account?</p>
+      <Button onClick={onOpenLogin} variant={"link"}>
+        Log in
+      </Button>
+    </div>
+  );
+
+  return <div>{isLogin ? loginHelpers : signUpHelpers}</div>;
+}
+
+function HalfColorScreen({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div
+      {...props}
+      className={cn("absolute bottom-0 left-0 top-0 z-[-1] w-1/2", className)}
+    ></div>
   );
 }
 
