@@ -3,13 +3,13 @@ import SigninForm from "./SigninForm";
 import SignupForm from "./SignupForm";
 import { Button } from "../ui/button";
 import { useState } from "react";
-import useInputForm from "../hooks/useInput";
 import {
   isValidEmail,
   isValidName,
   isValidPassword,
   isValidUsername,
 } from "@/lib/authValidation";
+import useInputForm from "@/hooks/useInput";
 
 function AuthPanel() {
   const [isLogin, setIsLogin] = useState(true);

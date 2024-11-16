@@ -2,7 +2,10 @@ import { cn } from "@/lib/utils";
 import { Input } from "../ui/input";
 import AuthFormButton from "./AuthFormButton";
 import ErrorField from "./ErrorField";
-import { InputForm } from "../hooks/useInput";
+import { InputForm } from "@/hooks/useInput";
+import { useState } from "react";
+import { SignupPayload } from "@/lib/api/payloads";
+import { ConflictError, signup } from "@/lib/api/api";
 
 function SignupForm({
   emailInput,
@@ -17,6 +20,10 @@ function SignupForm({
   nameInput: InputForm;
   usernameInput: InputForm;
 } & React.HTMLAttributes<HTMLFormElement>) {
+  const [isLoading, setIsLoading] = useState(false);
+  // const [error, setError] = useState("");
+  console.log(isLoading);
+
   const isButtonDisable =
     nameInput.value.trim().length === 0 ||
     usernameInput.value.trim().length === 0 ||
@@ -35,10 +42,32 @@ function SignupForm({
       return;
     }
 
-    // console.log("hre");
-    // console.log(emailInput.errorMessage);
-    // nameInput.setErrorMessage("PLEASE ENTER VALID NAME");
-    // emailInput.setErrorMessage("email already taken");
+    async function fetchSignup() {
+      setIsLoading(true);
+      const payload: SignupPayload = {
+        email: emailInput.value,
+        first_name: nameInput.value,
+        username: usernameInput.value,
+        password: passwordInput.value,
+      };
+
+      try {
+        const data = await signup(payload);
+        console.log(data);
+      } catch (err) {
+        if (err instanceof ConflictError) {
+          if (err.message === "e-mail already taken") {
+            emailInput.setErrorMessage(err.message);
+          }
+          if (err.message === "username already taken") {
+            usernameInput.setErrorMessage(err.message);
+          }
+        }
+      }
+      setIsLoading(false);
+    }
+
+    fetchSignup();
   };
 
   return (
@@ -96,6 +125,7 @@ function SignupForm({
           id="password"
           name="password"
           type="password"
+          autoComplete="on"
           value={passwordInput.value}
           onChange={passwordInput.handleChange}
           onBlur={passwordInput.handleBlur}
@@ -105,6 +135,9 @@ function SignupForm({
           error={passwordInput.errorMessage}
         />
       </div>
+      {isLoading && (
+        <p className="w-full text-center text-primary">Loading...</p>
+      )}
       <AuthFormButton disabled={isButtonDisable}>SIGN UP</AuthFormButton>
     </form>
   );

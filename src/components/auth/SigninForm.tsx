@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils";
 import { Input } from "../ui/input";
 import AuthFormButton from "./AuthFormButton";
-import { InputForm } from "../hooks/useInput";
 import ErrorField from "./ErrorField";
+import { InputForm } from "@/hooks/useInput";
 
 function SigninForm({
   emailInput,
@@ -40,6 +40,7 @@ function SigninForm({
           id="password"
           name="password"
           type="password"
+          autoComplete="on"
           value={passwordInput.value}
           onChange={passwordInput.handleChange}
           onBlur={passwordInput.handleBlur}
