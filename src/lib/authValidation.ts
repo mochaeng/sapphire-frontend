@@ -6,6 +6,9 @@ export function isValidEmail(email: string) {
   if (value.length === 0) {
     return "";
   }
+  if (value.length > 255) {
+    return "Email is too big";
+  }
   const isValid = emailRegex.test(email.toLowerCase());
   return isValid ? "" : "Please enter a valid email";
 }
@@ -15,11 +18,11 @@ export function isValidPassword(password: string) {
   if (value.length === 0) {
     return "";
   }
-  if (value.length < 4) {
-    return "Password should have at least 4 chars";
+  if (value.length < 3) {
+    return "Password should have at least 3 chars";
   }
   if (value.length > 72) {
-    return "Password should have less than 72 chars";
+    return "Password should be less than 72 chars";
   }
   return "";
 }

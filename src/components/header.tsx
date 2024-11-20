@@ -10,6 +10,7 @@ import {
 import { ReactNode } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+import { Link, NavLink } from "react-router-dom";
 
 function IconButton({
   href,
@@ -24,16 +25,20 @@ function IconButton({
 }) {
   return (
     <li className={cn("md:w-full", className)}>
-      <a
-        href={href}
-        className={cn(
-          "flex items-center justify-center gap-4 rounded-xl p-1 text-secondaryOnly hover:bg-primary-foreground hover:text-primary md:h-full md:w-full md:justify-center xl:justify-start",
-          className,
-        )}
+      <NavLink
+        to={href}
+        className={({ isActive }) =>
+          cn(
+            "flex items-center justify-center gap-4 rounded-xl p-1 text-secondaryOnly hover:bg-primary-foreground hover:text-primary md:h-full md:w-full md:justify-center xl:justify-start",
+            className,
+            { "text-primaryOnly": isActive },
+          )
+        }
+        end={true}
       >
         {children}
         <span className="hidden xl:block">{name}</span>
-      </a>
+      </NavLink>
     </li>
   );
 }
@@ -53,24 +58,32 @@ export default function Header() {
           <IconButton href="/" name="Home">
             <Home size={30} />
           </IconButton>
-          <IconButton href="/" name="Notifications">
+          <IconButton href="/my/notifications" name="Notifications">
             <Bell size={30} />
           </IconButton>
-          <IconButton href="/" name="NEW POST" className="md:hidden">
+          <IconButton
+            href="/posts/create"
+            name="NEW POST"
+            className="md:hidden"
+          >
             <CirclePlus size={30} />
           </IconButton>
-          <IconButton href="/" name="Messages">
+          <IconButton href="/my/messages" name="Messages">
             <MessageSquareText size={30} />
           </IconButton>
-          <IconButton href="/" name="My profile">
+          <IconButton href="/hutao" name="My profile">
             <CircleUserRound size={30} />
           </IconButton>
-          <IconButton href="/" name="More" className="hidden md:inline-flex">
+          <IconButton
+            href="/settings"
+            name="More"
+            className="hidden md:inline-flex"
+          >
             <Settings size={30} />
           </IconButton>
           <li className="hidden md:inline-flex md:w-full">
-            <a
-              href="/"
+            <NavLink
+              to="/posts/create"
               className="hidden rounded-xl bg-primary p-2 text-sm text-white hover:bg-blue-800 md:flex md:h-full md:w-full xl:justify-start"
             >
               <div className="relative flex w-full items-center justify-center gap-4 text-center xl:justify-start">
@@ -79,7 +92,7 @@ export default function Header() {
                   NEW POST
                 </span>
               </div>
-            </a>
+            </NavLink>
           </li>
         </ul>
       </nav>

@@ -4,3 +4,8 @@ export type SignupPayload = {
   password: string;
   username: string;
 };
+
+export type SigninPayload = {
+  email: string;
+  password: string;
+};

@@ -1,18 +1,19 @@
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
-import AuthPanel from "./components/auth/AuthPanel";
+import HomePage from "./pages/HomePage";
+import ErrorPage from "./pages/ErrorPage";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <HomePage />,
+    errorElement: <ErrorPage />,
+    children: [{ index: true, element: <HomePage /> }],
+  },
+]);
 
 function App() {
-  return (
-    <div className="flex w-full justify-center">
-      <AuthPanel />
-      {/* <div className="max-w-screen-2xl">
-        <Header />
-        <div className="flex w-full max-w-[1016px]">
-          <div className="h-2 w-full bg-rose-600"></div>
-        </div>
-      </div> */}
-    </div>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

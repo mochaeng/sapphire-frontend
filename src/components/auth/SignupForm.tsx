@@ -5,7 +5,7 @@ import ErrorField from "./ErrorField";
 import { InputForm } from "@/hooks/useInput";
 import { useState } from "react";
 import { SignupPayload } from "@/lib/api/payloads";
-import { ConflictError, signup } from "@/lib/api/api";
+import { ConflictError, DefaultError, signup } from "@/lib/api/api";
 
 function SignupForm({
   emailInput,
@@ -20,9 +20,8 @@ function SignupForm({
   nameInput: InputForm;
   usernameInput: InputForm;
 } & React.HTMLAttributes<HTMLFormElement>) {
-  const [isLoading, setIsLoading] = useState(false);
-  // const [error, setError] = useState("");
-  console.log(isLoading);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   const isButtonDisable =
     nameInput.value.trim().length === 0 ||
@@ -32,6 +31,7 @@ function SignupForm({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError("");
 
     if (
       !nameInput.isValid() ||
@@ -43,7 +43,8 @@ function SignupForm({
     }
 
     async function fetchSignup() {
-      setIsLoading(true);
+      setIsSubmitting(true);
+
       const payload: SignupPayload = {
         email: emailInput.value,
         first_name: nameInput.value,
@@ -63,8 +64,12 @@ function SignupForm({
             usernameInput.setErrorMessage(err.message);
           }
         }
+        if (err instanceof DefaultError) {
+          setError(err.message);
+        }
       }
-      setIsLoading(false);
+
+      setIsSubmitting(false);
     }
 
     fetchSignup();
@@ -72,8 +77,8 @@ function SignupForm({
 
   return (
     <form
-      onSubmit={handleSubmit}
       {...props}
+      onSubmit={handleSubmit}
       className={cn("flex w-full flex-col gap-6", className)}
     >
       <div>
@@ -84,6 +89,7 @@ function SignupForm({
           value={nameInput.value}
           onChange={nameInput.handleChange}
           onBlur={nameInput.handleBlur}
+          disabled={isSubmitting}
         />
         <ErrorField
           hasError={nameInput.hasError}
@@ -98,6 +104,7 @@ function SignupForm({
           value={usernameInput.value}
           onChange={usernameInput.handleChange}
           onBlur={usernameInput.handleBlur}
+          disabled={isSubmitting}
         />
         <ErrorField
           hasError={usernameInput.hasError}
@@ -113,6 +120,7 @@ function SignupForm({
           value={emailInput.value}
           onChange={emailInput.handleChange}
           onBlur={emailInput.handleBlur}
+          disabled={isSubmitting}
         />
         <ErrorField
           hasError={emailInput.hasError}
@@ -129,14 +137,18 @@ function SignupForm({
           value={passwordInput.value}
           onChange={passwordInput.handleChange}
           onBlur={passwordInput.handleBlur}
+          disabled={isSubmitting}
         />
         <ErrorField
           hasError={passwordInput.hasError}
           error={passwordInput.errorMessage}
         />
       </div>
-      {isLoading && (
-        <p className="w-full text-center text-primary">Loading...</p>
+      {isSubmitting && (
+        <p className="text-center text-primary text-sm">Loading...</p>
+      )}
+      {!isSubmitting && error && (
+        <p className="text-center text-sm text-rose-500">{error}</p>
       )}
       <AuthFormButton disabled={isButtonDisable}>SIGN UP</AuthFormButton>
     </form>
