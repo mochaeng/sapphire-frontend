@@ -5,9 +5,10 @@ import ErrorField from "./ErrorField";
 import { InputForm } from "@/hooks/useInput";
 import { Form, useNavigate } from "react-router-dom";
 import { SigninPayload } from "@/lib/api/payloads";
-import { DefaultError, signin, WrongEmailOrPassword } from "@/lib/api/api";
+import { signin } from "@/lib/api/api";
 import { useState } from "react";
 import { useAuth } from "@/provider/auth/useAuth";
+import { DefaultError, WrongEmailOrPasswordError } from "@/lib/api/errors";
 
 function SigninForm({
   emailInput,
@@ -42,22 +43,21 @@ function SigninForm({
       };
 
       try {
-        const data = await signin(payload);
-        console.log(data);
-        setIsSubmitting(false);
+        await signin(payload);
         setIsAuthenticated(true);
         navigate("/");
       } catch (err) {
         if (err instanceof DefaultError) {
           setError(err.message);
         }
-        if (err instanceof WrongEmailOrPassword) {
+        if (err instanceof WrongEmailOrPasswordError) {
           passwordInput.setErrorMessage(err.message);
         }
         setIsAuthenticated(false);
+      } finally {
+        setIsSubmitting(false);
       }
     }
-    setIsSubmitting(false);
     fetchSignin();
   };
 

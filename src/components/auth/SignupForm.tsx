@@ -5,9 +5,10 @@ import ErrorField from "./ErrorField";
 import { InputForm } from "@/hooks/useInput";
 import { useState } from "react";
 import { SignupPayload } from "@/lib/api/payloads";
-import { ConflictError, DefaultError, signup } from "@/lib/api/api";
+import { signup } from "@/lib/api/api";
 import useInputForm from "../hooks/useInput";
 import { isValidName, isValidUsername } from "@/lib/authValidation";
+import { ConflictError, DefaultError } from "@/lib/api/errors";
 
 function SignupForm({
   emailInput,

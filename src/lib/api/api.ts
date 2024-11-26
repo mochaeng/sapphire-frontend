@@ -1,3 +1,8 @@
+import {
+  ConflictError,
+  tryAgainError,
+  WrongEmailOrPasswordError,
+} from "./errors";
 import { SigninPayload, SignupPayload } from "./payloads";
 
 export const API_URL = import.meta.env.VITE_API_URL as string;
@@ -32,40 +37,24 @@ export async function signin(payload: SigninPayload) {
     credentials: "include",
     body: JSON.stringify(payload),
   });
+  if (response.status === 204) {
+    return;
+  }
   if (response.status === 400 || response.status === 500) {
     throw tryAgainError;
   }
   if (response.status === 401) {
-    throw new WrongEmailOrPassword("Wrong email or password");
-  }
-  if (response.status === 201) {
-    const data = await response.json();
-    return data;
+    throw new WrongEmailOrPasswordError("Wrong email or password");
   }
   throw tryAgainError;
 }
 
-export class ConflictError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "ConflictError";
+export async function signout() {
+  const response = await fetch(`${API_URL}/v1/auth/signout`, {
+    method: "POST",
+    credentials: "include",
+  });
+  if (response.status !== 204) {
+    return tryAgainError;
   }
 }
-
-export class DefaultError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "DefaultError";
-  }
-}
-
-export class WrongEmailOrPassword extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "WrongEmailOrPassword";
-  }
-}
-
-export const tryAgainError = new DefaultError(
-  "An error occurred. Please try again",
-);

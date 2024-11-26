@@ -8,6 +8,7 @@ export default function AuthProvider({
   children: React.ReactNode;
 }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function checkAuthStatus() {
@@ -19,19 +20,21 @@ export default function AuthProvider({
           },
           credentials: "include",
         });
-        setIsAuthenticated(response.status === 200);
+        setIsAuthenticated(response.status === 204);
       } catch (error) {
         console.log("error checking auth status:", error);
         setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
       }
     }
 
     checkAuthStatus();
   }, []);
 
-  useEffect(() => {
-    console.log("auth", isAuthenticated);
-  }, [isAuthenticated]);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
