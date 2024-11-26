@@ -6,22 +6,22 @@ import { InputForm } from "@/hooks/useInput";
 import { useState } from "react";
 import { SignupPayload } from "@/lib/api/payloads";
 import { ConflictError, DefaultError, signup } from "@/lib/api/api";
+import useInputForm from "../hooks/useInput";
+import { isValidName, isValidUsername } from "@/lib/authValidation";
 
 function SignupForm({
   emailInput,
   passwordInput,
-  nameInput,
-  usernameInput,
   className,
   ...props
 }: {
   emailInput: InputForm;
   passwordInput: InputForm;
-  nameInput: InputForm;
-  usernameInput: InputForm;
 } & React.HTMLAttributes<HTMLFormElement>) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const nameInput = useInputForm("", isValidName);
+  const usernameInput = useInputForm("", isValidUsername);
 
   const isButtonDisable =
     nameInput.value.trim().length === 0 ||

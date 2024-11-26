@@ -29,6 +29,7 @@ export async function signin(payload: SigninPayload) {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
     body: JSON.stringify(payload),
   });
   if (response.status === 400 || response.status === 500) {
@@ -65,4 +66,6 @@ export class WrongEmailOrPassword extends Error {
   }
 }
 
-const tryAgainError = new DefaultError("An error occurred. Please try again");
+export const tryAgainError = new DefaultError(
+  "An error occurred. Please try again",
+);

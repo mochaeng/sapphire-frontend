@@ -3,9 +3,11 @@ import { Input } from "../ui/input";
 import AuthFormButton from "./AuthFormButton";
 import ErrorField from "./ErrorField";
 import { InputForm } from "@/hooks/useInput";
-import { useState } from "react";
+import { Form, useNavigate } from "react-router-dom";
 import { SigninPayload } from "@/lib/api/payloads";
 import { DefaultError, signin, WrongEmailOrPassword } from "@/lib/api/api";
+import { useState } from "react";
+import { useAuth } from "@/provider/auth/useAuth";
 
 function SigninForm({
   emailInput,
@@ -21,10 +23,13 @@ function SigninForm({
   const isButtonDisable =
     emailInput.value.trim().length === 0 ||
     passwordInput.value.trim().length === 0;
+  const { setIsAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
+    setIsAuthenticated(false);
 
     if (!emailInput.isValid() || !passwordInput.isValid) return;
 
@@ -39,6 +44,9 @@ function SigninForm({
       try {
         const data = await signin(payload);
         console.log(data);
+        setIsSubmitting(false);
+        setIsAuthenticated(true);
+        navigate("/");
       } catch (err) {
         if (err instanceof DefaultError) {
           setError(err.message);
@@ -46,16 +54,15 @@ function SigninForm({
         if (err instanceof WrongEmailOrPassword) {
           passwordInput.setErrorMessage(err.message);
         }
+        setIsAuthenticated(false);
       }
-
-      setIsSubmitting(false);
     }
-
+    setIsSubmitting(false);
     fetchSignin();
   };
 
   return (
-    <form
+    <Form
       {...props}
       onSubmit={handleSubmit}
       className={cn("flex w-full flex-col gap-4", className)}
@@ -100,7 +107,7 @@ function SigninForm({
         <p className="text-center text-sm text-rose-500">{error}</p>
       )}
       <AuthFormButton disabled={isButtonDisable}>LOG IN</AuthFormButton>
-    </form>
+    </Form>
   );
 }
 

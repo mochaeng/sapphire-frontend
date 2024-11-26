@@ -3,20 +3,13 @@ import SigninForm from "./SigninForm";
 import SignupForm from "./SignupForm";
 import { Button } from "../ui/button";
 import { useState } from "react";
-import {
-  isValidEmail,
-  isValidName,
-  isValidPassword,
-  isValidUsername,
-} from "@/lib/authValidation";
+import { isValidEmail, isValidPassword } from "@/lib/authValidation";
 import useInputForm from "@/hooks/useInput";
 
 function AuthPanel() {
   const [isLogin, setIsLogin] = useState(true);
   const emailInput = useInputForm("", isValidEmail);
   const passwordInput = useInputForm("", isValidPassword);
-  const nameInput = useInputForm("", isValidName);
-  const usernameInput = useInputForm("", isValidUsername);
 
   let title = "Log in";
   if (!isLogin) {
@@ -60,8 +53,6 @@ function AuthPanel() {
             />
           ) : (
             <SignupForm
-              nameInput={nameInput}
-              usernameInput={usernameInput}
               emailInput={emailInput}
               passwordInput={passwordInput}
               className="max-w-authForm"
