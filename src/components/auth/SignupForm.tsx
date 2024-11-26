@@ -2,13 +2,12 @@ import { cn } from "@/lib/utils";
 import { Input } from "../ui/input";
 import AuthFormButton from "./AuthFormButton";
 import ErrorField from "./ErrorField";
-import { InputForm } from "@/hooks/useInput";
+import useInputForm, { InputForm } from "@/hooks/useInput";
 import { useState } from "react";
 import { SignupPayload } from "@/lib/api/payloads";
-import { signup } from "@/lib/api/api";
-import useInputForm from "../hooks/useInput";
 import { isValidName, isValidUsername } from "@/lib/authValidation";
 import { ConflictError, DefaultError } from "@/lib/api/errors";
+import { signup } from "@/lib/api/auth";
 
 function SignupForm({
   emailInput,

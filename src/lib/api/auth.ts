@@ -4,8 +4,7 @@ import {
   WrongEmailOrPasswordError,
 } from "./errors";
 import { SigninPayload, SignupPayload } from "./payloads";
-
-export const API_URL = import.meta.env.VITE_API_URL as string;
+import { API_URL } from "./utils";
 
 export async function signup(payload: SignupPayload) {
   const response = await fetch(`${API_URL}/v1/auth/signup`, {
@@ -57,4 +56,15 @@ export async function signout() {
   if (response.status !== 204) {
     return tryAgainError;
   }
+}
+
+export async function authStatus() {
+  const response = await fetch(`${API_URL}/v1/auth/status`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+  return response.status === 204;
 }

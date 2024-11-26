@@ -1,6 +1,6 @@
-import { API_URL } from "@/lib/api/api";
 import { useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
+import { authStatus } from "@/lib/api/auth";
 
 export default function AuthProvider({
   children,
@@ -13,14 +13,7 @@ export default function AuthProvider({
   useEffect(() => {
     async function checkAuthStatus() {
       try {
-        const response = await fetch(`${API_URL}/v1/auth/status`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
-        setIsAuthenticated(response.status === 204);
+        setIsAuthenticated(await authStatus());
       } catch (error) {
         console.log("error checking auth status:", error);
         setIsAuthenticated(false);

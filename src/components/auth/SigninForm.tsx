@@ -5,10 +5,10 @@ import ErrorField from "./ErrorField";
 import { InputForm } from "@/hooks/useInput";
 import { Form, useNavigate } from "react-router-dom";
 import { SigninPayload } from "@/lib/api/payloads";
-import { signin } from "@/lib/api/api";
+import { signin } from "@/lib/api/auth";
 import { useState } from "react";
-import { useAuth } from "@/provider/auth/useAuth";
 import { DefaultError, WrongEmailOrPasswordError } from "@/lib/api/errors";
+import { useAuth } from "@/hooks/useAuth";
 
 function SigninForm({
   emailInput,
