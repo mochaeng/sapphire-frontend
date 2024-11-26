@@ -4,7 +4,7 @@ import SignupForm from "./SignupForm";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { isValidEmail, isValidPassword } from "@/lib/authValidation";
-import useInputForm from "@/hooks/useInput";
+import { useInputForm } from "@/hooks/useInput";
 
 function AuthPanel() {
   const [isLogin, setIsLogin] = useState(true);

@@ -10,10 +10,10 @@ export type InputForm = {
   isValid: () => boolean;
 };
 
-export default function useInputForm(
+export const useInputForm = (
   defaultValue: string,
   validationFn: (value: string) => string,
-): InputForm {
+): InputForm => {
   const [value, setValue] = useState(defaultValue);
   const [didEdit, setDidEdit] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -47,4 +47,4 @@ export default function useInputForm(
     setErrorMessage,
     isValid: isValid,
   };
-}
+};

@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { Input } from "../ui/input";
 import AuthFormButton from "./AuthFormButton";
 import ErrorField from "./ErrorField";
-import useInputForm, { InputForm } from "@/hooks/useInput";
+import { InputForm, useInputForm } from "@/hooks/useInput";
 import { useState } from "react";
 import { SignupPayload } from "@/lib/api/payloads";
 import { isValidName, isValidUsername } from "@/lib/authValidation";
