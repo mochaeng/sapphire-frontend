@@ -76,6 +76,7 @@ export default {
         authForm: "344px",
         first: "632px",
         second: "384px",
+        sapphire: "1296",
       },
       maxHeight: {
         post: "calc(var(--vh, 1vh)* 100 - 120px)",

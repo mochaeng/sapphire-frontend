@@ -35,8 +35,8 @@ function SigninForm() {
   });
 
   const isButtonDisable =
-    form.watch("email").trim().length === 0 ||
-    form.watch("password").trim().length === 0;
+    (form.watch("email") || "").trim().length === 0 ||
+    (form.watch("password") || "").trim().length === 0;
 
   const onSubmit = (values: z.infer<typeof signinFormSchema>) => {
     setError("");
@@ -55,8 +55,6 @@ function SigninForm() {
         setIsAuthenticated(true);
         navigate("/");
       } catch (err) {
-        console.log("errorrr");
-        console.log(err);
         if (err instanceof DefaultError) {
           setError(err.message);
         }
@@ -80,6 +78,7 @@ function SigninForm() {
         className="flex w-full max-w-authForm flex-col gap-4"
       >
         <FormField
+          disabled={isSubmitting}
           control={form.control}
           name="email"
           render={({ field }) => (
@@ -93,6 +92,7 @@ function SigninForm() {
           )}
         />
         <FormField
+          disabled={isSubmitting}
           control={form.control}
           name="password"
           render={({ field }) => (
@@ -111,7 +111,9 @@ function SigninForm() {
         {!isSubmitting && error && (
           <p className="text-center text-sm text-rose-500">{error}</p>
         )}
-        <AuthFormButton disabled={isButtonDisable}>LOG IN</AuthFormButton>
+        <AuthFormButton disabled={isButtonDisable || isSubmitting}>
+          LOG IN
+        </AuthFormButton>
       </form>
     </Form>
   );

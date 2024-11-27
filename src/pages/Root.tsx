@@ -10,7 +10,7 @@ function Root() {
     return <Outlet />;
   } else {
     return (
-      <div className="flex w-full max-w-screen-xl justify-center">
+      <div className="max-w-sapphire flex w-full justify-center">
         <Header />
         <div className="flex w-full max-w-[1016px]">
           <div className="h-2 w-full bg-rose-600">

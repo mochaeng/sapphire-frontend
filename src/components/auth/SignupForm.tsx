@@ -34,10 +34,10 @@ function SignupForm() {
   });
 
   const isButtonDisable =
-    form.watch("name").trim().length === 0 ||
-    form.watch("username").trim().length === 0 ||
-    form.watch("email").trim().length === 0 ||
-    form.watch("password").trim().length === 0;
+    (form.watch("name") || "").trim().length === 0 ||
+    (form.watch("username") || "").trim().length === 0 ||
+    (form.watch("email") || "").trim().length === 0 ||
+    (form.watch("password") || "").trim().length === 0;
 
   const onSubmit = (values: z.infer<typeof signupFormSchema>) => {
     setError("");
@@ -82,6 +82,7 @@ function SignupForm() {
         className="flex w-full max-w-authForm flex-col gap-4"
       >
         <FormField
+          disabled={isSubmitting}
           control={form.control}
           name="name"
           render={({ field }) => (
@@ -96,6 +97,7 @@ function SignupForm() {
           )}
         />
         <FormField
+          disabled={isSubmitting}
           control={form.control}
           name="username"
           render={({ field }) => (
@@ -109,6 +111,7 @@ function SignupForm() {
           )}
         />
         <FormField
+          disabled={isSubmitting}
           control={form.control}
           name="email"
           render={({ field }) => (
@@ -122,6 +125,7 @@ function SignupForm() {
           )}
         />
         <FormField
+          disabled={isSubmitting}
           control={form.control}
           name="password"
           render={({ field }) => (
@@ -140,7 +144,9 @@ function SignupForm() {
         {!isSubmitting && error && (
           <p className="text-center text-sm text-rose-500">{error}</p>
         )}
-        <AuthFormButton disabled={isButtonDisable}>LOG IN</AuthFormButton>
+        <AuthFormButton disabled={isButtonDisable || isSubmitting}>
+          SIGN UP
+        </AuthFormButton>
       </form>
     </Form>
   );
