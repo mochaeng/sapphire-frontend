@@ -10,16 +10,13 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { NavLink } from "react-router-dom";
 import AccountMenu from "./accountMenu";
-import { cn } from "@/lib/utils";
+import {
+  buttonClasses,
+  cn,
+  focusClasses,
+  focusVisibleClasses,
+} from "@/lib/utils";
 import { Button } from "./ui/button";
-
-const focusClasses = "focus:bg-primary-foreground focus:text-primary";
-
-const focusVisibleClasses =
-  "focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-primary focus-visible:outline-none";
-
-const buttonClasses =
-  "flex items-center justify-center gap-4 rounded-xl bg-white px-0 py-[6px] text-secondaryOnly shadow-none hover:bg-transparent  md:h-full md:w-full md:justify-center xl:justify-start";
 
 const iconSize = 33;
 
@@ -31,7 +28,13 @@ function Header() {
           <div className="flex w-full items-center justify-between gap-3 px-2 md:flex-col xl:items-start">
             <li className="hidden md:block md:w-full">
               <AccountMenu className="hidden md:block">
-                <Button className={cn(buttonClasses, focusVisibleClasses)}>
+                <Button
+                  className={cn(
+                    "hover:bg-transparent",
+                    buttonClasses,
+                    focusVisibleClasses,
+                  )}
+                >
                   <Avatar className="hidden size-12 md:block">
                     <AvatarImage
                       src="https://github.com/naesamo.png "
@@ -58,20 +61,37 @@ function Header() {
             <IconButton href="/my/messages" name="Messages">
               <MessageSquareText size={iconSize} />
             </IconButton>
-            <IconButton href="/hutao" name="My profile">
+            <IconButton
+              href="/hutao"
+              name="My profile"
+              className="hidden md:flex"
+            >
               <CircleUserRound size={iconSize} />
             </IconButton>
             <li className="hidden md:block md:w-full">
               <AccountMenu>
-                <Button
+                <button
                   className={cn(
+                    "hover:bg-secondary hover:text-primary",
                     buttonClasses,
-                    focusClasses,
                     focusVisibleClasses,
                   )}
                 >
                   <CircleEllipsis className="!h-[33px] !w-[33px]" />
                   <span className="hidden text-[19px] xl:block">More</span>
+                </button>
+              </AccountMenu>
+            </li>
+            <li className="md:hidden md:w-full">
+              <AccountMenu>
+                <Button className={cn(buttonClasses, focusVisibleClasses)}>
+                  <Avatar className="size-10">
+                    <AvatarImage
+                      src="https://github.com/naesamo.png "
+                      className="object-contain"
+                    />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
                 </Button>
               </AccountMenu>
             </li>

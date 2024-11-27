@@ -82,7 +82,7 @@ export default {
         post: "calc(var(--vh, 1vh)* 100 - 120px)",
       },
       fontSize: {
-        primary: "19px",
+        fontPrimary: "19px",
       },
       padding: {
         header: "calc(var(--header-height))",
