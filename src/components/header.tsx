@@ -84,7 +84,13 @@ function Header() {
             </li>
             <li className="md:hidden md:w-full">
               <AccountMenu>
-                <Button className={cn(buttonClasses, focusVisibleClasses)}>
+                <Button
+                  className={cn(
+                    "hover:bg-transparent",
+                    buttonClasses,
+                    focusVisibleClasses,
+                  )}
+                >
                   <Avatar className="size-10">
                     <AvatarImage
                       src="https://github.com/naesamo.png "
@@ -124,7 +130,7 @@ function IconButton({
           cn(
             "flex items-center justify-center gap-4 rounded-xl py-[8px] text-secondaryOnly hover:bg-primary-foreground hover:text-primary md:h-full md:w-full md:justify-center xl:justify-start",
             className,
-            focusClasses,
+            // focusClasses,
             focusVisibleClasses,
             { "text-primaryOnly": isActive },
           )

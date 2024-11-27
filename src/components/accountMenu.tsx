@@ -5,6 +5,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
+  SheetClose,
 } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
@@ -118,13 +119,17 @@ function SheetButton({
 
   if (as === "a") {
     return (
-      <Link to={href as string} className={classes}>
-        {children}
-      </Link>
+      <SheetClose asChild>
+        <Link to={href as string} className={classes}>
+          {children}
+        </Link>
+      </SheetClose>
     );
   }
   return (
-    <button className={cn("hover:text-primary", classes)}>{children}</button>
+    <SheetClose asChild>
+      <button className={cn("hover:text-primary", classes)}>{children}</button>
+    </SheetClose>
   );
 }
 
