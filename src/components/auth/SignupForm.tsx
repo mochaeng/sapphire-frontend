@@ -1,55 +1,55 @@
-import { cn } from "@/lib/utils";
-import { Input } from "../ui/input";
 import AuthFormButton from "./AuthFormButton";
-import ErrorField from "./ErrorField";
-import { InputForm, useInputForm } from "@/hooks/useInput";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { SignupPayload } from "@/lib/api/payloads";
-import { isValidName, isValidUsername } from "@/lib/authValidation";
+import { signupFormSchema } from "@/lib/authValidation";
 import { ConflictError, DefaultError } from "@/lib/api/errors";
 import { signup } from "@/lib/api/auth";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-function SignupForm({
-  emailInput,
-  passwordInput,
-  className,
-  ...props
-}: {
-  emailInput: InputForm;
-  passwordInput: InputForm;
-} & React.HTMLAttributes<HTMLFormElement>) {
+function SignupForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const nameInput = useInputForm("", isValidName);
-  const usernameInput = useInputForm("", isValidUsername);
+
+  const form = useForm<z.infer<typeof signupFormSchema>>({
+    resolver: zodResolver(signupFormSchema),
+    mode: "onBlur",
+    defaultValues: {
+      name: "",
+      username: "",
+      email: "",
+      password: "",
+    },
+  });
 
   const isButtonDisable =
-    nameInput.value.trim().length === 0 ||
-    usernameInput.value.trim().length === 0 ||
-    emailInput.value.trim().length === 0 ||
-    passwordInput.value.trim().length === 0;
+    form.watch("name").trim().length === 0 ||
+    form.watch("username").trim().length === 0 ||
+    form.watch("email").trim().length === 0 ||
+    form.watch("password").trim().length === 0;
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmit = (values: z.infer<typeof signupFormSchema>) => {
     setError("");
-
-    if (
-      !nameInput.isValid() ||
-      !usernameInput.isValid() ||
-      !emailInput.isValid() ||
-      !passwordInput.isValid()
-    ) {
-      return;
-    }
 
     async function fetchSignup() {
       setIsSubmitting(true);
 
       const payload: SignupPayload = {
-        email: emailInput.value,
-        first_name: nameInput.value,
-        username: usernameInput.value,
-        password: passwordInput.value,
+        email: values.email,
+        first_name: values.name,
+        username: values.username,
+        password: values.password,
       };
 
       try {
@@ -58,10 +58,10 @@ function SignupForm({
       } catch (err) {
         if (err instanceof ConflictError) {
           if (err.message === "e-mail already taken") {
-            emailInput.setErrorMessage(err.message);
+            form.setError("email", { message: err.message });
           }
           if (err.message === "username already taken") {
-            usernameInput.setErrorMessage(err.message);
+            form.setError("username", { message: err.message });
           }
         }
         if (err instanceof DefaultError) {
@@ -76,82 +76,73 @@ function SignupForm({
   };
 
   return (
-    <form
-      {...props}
-      onSubmit={handleSubmit}
-      className={cn("flex w-full flex-col gap-6", className)}
-    >
-      <div>
-        <label htmlFor="name">Name</label>
-        <Input
-          id="name"
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex w-full max-w-authForm flex-col gap-4"
+      >
+        <FormField
+          control={form.control}
           name="name"
-          value={nameInput.value}
-          onChange={nameInput.handleChange}
-          onBlur={nameInput.handleBlur}
-          disabled={isSubmitting}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormDescription>This is your public name</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-        <ErrorField
-          hasError={nameInput.hasError}
-          error={nameInput.errorMessage}
-        />
-      </div>
-      <div>
-        <label htmlFor="username">Username</label>
-        <Input
-          id="username"
+        <FormField
+          control={form.control}
           name="username"
-          value={usernameInput.value}
-          onChange={usernameInput.handleChange}
-          onBlur={usernameInput.handleBlur}
-          disabled={isSubmitting}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Username</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-        <ErrorField
-          hasError={usernameInput.hasError}
-          error={usernameInput.errorMessage}
-        />
-      </div>
-      <div>
-        <label htmlFor="email">Email</label>
-        <Input
-          id="email"
+        <FormField
+          control={form.control}
           name="email"
-          type="email"
-          value={emailInput.value}
-          onChange={emailInput.handleChange}
-          onBlur={emailInput.handleBlur}
-          disabled={isSubmitting}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-        <ErrorField
-          hasError={emailInput.hasError}
-          error={emailInput.errorMessage}
-        />
-      </div>
-      <div>
-        <label htmlFor="password">Password</label>
-        <Input
-          id="password"
+        <FormField
+          control={form.control}
           name="password"
-          type="password"
-          autoComplete="on"
-          value={passwordInput.value}
-          onChange={passwordInput.handleChange}
-          onBlur={passwordInput.handleBlur}
-          disabled={isSubmitting}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input type="password" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-        <ErrorField
-          hasError={passwordInput.hasError}
-          error={passwordInput.errorMessage}
-        />
-      </div>
-      {isSubmitting && (
-        <p className="text-center text-primary text-sm">Loading...</p>
-      )}
-      {!isSubmitting && error && (
-        <p className="text-center text-sm text-rose-500">{error}</p>
-      )}
-      <AuthFormButton disabled={isButtonDisable}>SIGN UP</AuthFormButton>
-    </form>
+        {isSubmitting && (
+          <p className="text-center text-primary text-sm">Loading...</p>
+        )}
+        {!isSubmitting && error && (
+          <p className="text-center text-sm text-rose-500">{error}</p>
+        )}
+        <AuthFormButton disabled={isButtonDisable}>LOG IN</AuthFormButton>
+      </form>
+    </Form>
   );
 }
 

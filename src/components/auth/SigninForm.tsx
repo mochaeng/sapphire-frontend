@@ -1,45 +1,53 @@
-import { cn } from "@/lib/utils";
-import { Input } from "../ui/input";
 import AuthFormButton from "./AuthFormButton";
-import ErrorField from "./ErrorField";
-import { InputForm } from "@/hooks/useInput";
-import { Form, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { SigninPayload } from "@/lib/api/payloads";
 import { signin } from "@/lib/api/auth";
 import { useState } from "react";
 import { DefaultError, WrongEmailOrPasswordError } from "@/lib/api/errors";
 import { useAuth } from "@/hooks/useAuth";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { signinFormSchema } from "@/lib/authValidation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
-function SigninForm({
-  emailInput,
-  passwordInput,
-  className,
-  ...props
-}: {
-  emailInput: InputForm;
-  passwordInput: InputForm;
-} & React.HtmlHTMLAttributes<HTMLFormElement>) {
+function SigninForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const isButtonDisable =
-    emailInput.value.trim().length === 0 ||
-    passwordInput.value.trim().length === 0;
   const { setIsAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const form = useForm<z.infer<typeof signinFormSchema>>({
+    resolver: zodResolver(signinFormSchema),
+    mode: "onBlur",
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const isButtonDisable =
+    form.watch("email").trim().length === 0 ||
+    form.watch("password").trim().length === 0;
+
+  const onSubmit = (values: z.infer<typeof signinFormSchema>) => {
     setError("");
     setIsAuthenticated(false);
-
-    if (!emailInput.isValid() || !passwordInput.isValid) return;
 
     async function fetchSignin() {
       setIsSubmitting(true);
 
       const payload: SigninPayload = {
-        email: emailInput.value,
-        password: passwordInput.value,
+        email: values.email,
+        password: values.password,
       };
 
       try {
@@ -47,66 +55,64 @@ function SigninForm({
         setIsAuthenticated(true);
         navigate("/");
       } catch (err) {
+        console.log("errorrr");
+        console.log(err);
         if (err instanceof DefaultError) {
           setError(err.message);
         }
         if (err instanceof WrongEmailOrPasswordError) {
-          passwordInput.setErrorMessage(err.message);
+          form.setError("email", { message: "" });
+          form.setError("password", { message: err.message });
         }
         setIsAuthenticated(false);
       } finally {
         setIsSubmitting(false);
       }
     }
+
     fetchSignin();
   };
 
   return (
-    <Form
-      {...props}
-      onSubmit={handleSubmit}
-      className={cn("flex w-full flex-col gap-4", className)}
-    >
-      <div>
-        <label htmlFor="email">Email</label>
-        <Input
-          id="email"
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex w-full max-w-authForm flex-col gap-4"
+      >
+        <FormField
+          control={form.control}
           name="email"
-          type="email"
-          value={emailInput.value}
-          onChange={emailInput.handleChange}
-          onBlur={emailInput.handleBlur}
-          disabled={isSubmitting}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-        <ErrorField
-          hasError={emailInput.hasError}
-          error={emailInput.errorMessage}
-        />
-      </div>
-      <div>
-        <label htmlFor="password">Password</label>
-        <Input
-          id="password"
+        <FormField
+          control={form.control}
           name="password"
-          type="password"
-          autoComplete="on"
-          value={passwordInput.value}
-          onChange={passwordInput.handleChange}
-          onBlur={passwordInput.handleBlur}
-          disabled={isSubmitting}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input type="password" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-        <ErrorField
-          hasError={passwordInput.hasError}
-          error={passwordInput.errorMessage}
-        />
-      </div>
-      {isSubmitting && (
-        <p className="text-center text-primary text-sm">Loading...</p>
-      )}
-      {!isSubmitting && error && (
-        <p className="text-center text-sm text-rose-500">{error}</p>
-      )}
-      <AuthFormButton disabled={isButtonDisable}>LOG IN</AuthFormButton>
+        {isSubmitting && (
+          <p className="text-center text-primary text-sm">Loading...</p>
+        )}
+        {!isSubmitting && error && (
+          <p className="text-center text-sm text-rose-500">{error}</p>
+        )}
+        <AuthFormButton disabled={isButtonDisable}>LOG IN</AuthFormButton>
+      </form>
     </Form>
   );
 }

@@ -5,17 +5,10 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import HeaderIconButton from "./headerIconButton";
-import { CircleEllipsis, CircleUserRound, Settings } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { CircleEllipsis } from "lucide-react";
 
 function AccountMenu() {
   return (

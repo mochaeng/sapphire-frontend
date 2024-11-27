@@ -3,32 +3,21 @@ import SigninForm from "./SigninForm";
 import SignupForm from "./SignupForm";
 import { Button } from "../ui/button";
 import { useState } from "react";
-import { isValidEmail, isValidPassword } from "@/lib/authValidation";
-import { useInputForm } from "@/hooks/useInput";
 
 function AuthPanel() {
   const [isLogin, setIsLogin] = useState(true);
-  const emailInput = useInputForm("", isValidEmail);
-  const passwordInput = useInputForm("", isValidPassword);
 
   let title = "Log in";
   if (!isLogin) {
     title = "Create your account";
   }
 
-  const cleanErrors = () => {
-    emailInput.setErrorMessage("");
-    passwordInput.setErrorMessage("");
-  };
-
   const handleOpenSignup = () => {
     setIsLogin(false);
-    cleanErrors();
   };
 
   const handleOpenLogin = () => {
     setIsLogin(true);
-    cleanErrors();
   };
 
   return (
@@ -43,21 +32,9 @@ function AuthPanel() {
         </section>
         <section className="flex flex-col items-center justify-center gap-2">
           <div className="w-full max-w-authForm">
-            <p className="mb-4 font-semibold">{title}</p>
+            <p className="mb-1 font-semibold">{title}</p>
           </div>
-          {isLogin ? (
-            <SigninForm
-              emailInput={emailInput}
-              passwordInput={passwordInput}
-              className="max-w-authForm"
-            />
-          ) : (
-            <SignupForm
-              emailInput={emailInput}
-              passwordInput={passwordInput}
-              className="max-w-authForm"
-            />
-          )}
+          {isLogin ? <SigninForm /> : <SignupForm />}
           <AuxPanel
             onOpenLogin={handleOpenLogin}
             onOpenSignup={handleOpenSignup}
