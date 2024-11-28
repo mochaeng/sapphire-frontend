@@ -11,8 +11,10 @@ body {
     /* my own variables */
     --vh: 8.44px;
     --header-height: 3.5rem;
+    /* colors */
     --primary-only: 228, 6%, 15%;
     --secondary-only: 211, 12%, 59%;
+    --profile-header: 0, 0%, 100%;
     /* ------ */
 
     --background: 0 0% 100%;

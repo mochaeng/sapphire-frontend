@@ -35,7 +35,7 @@ function App() {
   return (
     <AuthProvider>
       <AuthUserProvider>
-        <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+        <ThemeProvider defaultTheme="light" storageKey="sapphire-ui-theme">
           <RouterProvider router={router} />
         </ThemeProvider>
       </AuthUserProvider>

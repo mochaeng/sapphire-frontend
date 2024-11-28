@@ -8,6 +8,7 @@ export default {
         // my colors
         primaryOnly: "hsl(var(--primary-only))",
         secondaryOnly: "hsl(var(--secondary-only))",
+        profileHeader: "hsl(var(--profile-header))",
 
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
@@ -61,8 +62,8 @@ export default {
       screens: {
         md: "500px",
         lg: "616px",
-        "lg-1": "768px",
-        "lg-2": "1004px",
+        "lg-1": "768px", // the center wrapper get thiner
+        "lg-2": "1004px", // the right wrapper appears
         xl: "1280px",
       },
       width: {
@@ -77,12 +78,15 @@ export default {
         first: "632px",
         second: "384px",
         sapphire: "1296px",
+        centerWrapper: "632px",
+        rightWrapper: "384px",
       },
       maxHeight: {
         post: "calc(var(--vh, 1vh)* 100 - 120px)",
       },
       fontSize: {
         fontPrimary: "19px",
+        sapphire: ["19px", "24px"],
       },
       padding: {
         header: "calc(var(--header-height))",

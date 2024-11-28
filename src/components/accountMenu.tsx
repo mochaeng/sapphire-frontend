@@ -55,6 +55,8 @@ function AccountMenu({
     }
   };
 
+  const separatorClasses = "h-[1px] bg-secondaryOnly opacity-25";
+
   return (
     <div className="relative" {...props}>
       <Sheet>
@@ -87,7 +89,7 @@ function AccountMenu({
                 <span className="text-secondaryOnly">@{user.username}</span>
               </div>
             </div>
-            <Separator className="bg-primaryOnly" />
+            <Separator className={separatorClasses} />
             <div className="px-2 text-sm">
               <SheetButton as="a" href="/car">
                 <CircleUserRound />
@@ -102,7 +104,7 @@ function AccountMenu({
                 <span>Settings</span>
               </SheetButton>
             </div>
-            <Separator className="bg-primaryOnly" />
+            <Separator className={separatorClasses} />
             <div className="px-2">
               <button
                 onClick={toggleTheme}
@@ -112,7 +114,7 @@ function AccountMenu({
                 <span>{iconText}</span>
               </button>
             </div>
-            <Separator className="bg-primaryOnly" />
+            <Separator className={separatorClasses} />
             <div className="px-2">
               <SheetButton as="button">
                 <LogOut />
