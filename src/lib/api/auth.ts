@@ -1,6 +1,8 @@
 import {
   ConflictError,
+  ServerError,
   tryAgainError,
+  UnauthorizedError,
   WrongEmailOrPasswordError,
 } from "./errors";
 import { SigninPayload, SignupPayload } from "./payloads";
@@ -60,11 +62,32 @@ export async function signout() {
 
 export async function authStatus() {
   const response = await fetch(`${API_URL}/v1/auth/status`, {
-    method: "GET",
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     credentials: "include",
   });
   return response.status === 204;
+}
+
+export async function authMe() {
+  const response = await fetch(`${API_URL}/v1/auth/me`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+  if (response.status === 200) {
+    const data = await response.json();
+    return data;
+  }
+  if (response.status === 401) {
+    throw new UnauthorizedError();
+  }
+  if (response.status === 500) {
+    throw new ServerError();
+  }
+  throw tryAgainError;
 }

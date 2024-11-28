@@ -4,7 +4,6 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
   SheetClose,
 } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -20,8 +19,9 @@ import {
   Sun,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTheme } from "@/hooks/useTheme";
+import { useAuthUser } from "@/hooks/useAuthUser";
 
 function AccountMenu({
   children,
@@ -30,7 +30,16 @@ function AccountMenu({
   children: React.ReactNode;
 } & React.HTMLAttributes<HTMLDivElement>) {
   const { theme, setTheme } = useTheme();
+  const { user } = useAuthUser();
+  const [portalContainer, setPortalContainer] = useState<Element | null>(null);
+  const isMobile = useMediaQuery("(max-width: 499px)");
 
+  useEffect(() => {
+    const portal = isMobile ? document.body : document.getElementById("header");
+    setPortalContainer(portal);
+  }, [isMobile]);
+
+  const side = isMobile ? "right" : "top";
   let iconTheme = <Moon />;
   let iconText = "Dark Mode";
   if (theme === "light") {
@@ -38,21 +47,28 @@ function AccountMenu({
     iconText = "Light Mode";
   }
 
-  const isMobile = useMediaQuery("(max-width: 499px)");
-  const side = isMobile ? "right" : "left";
+  const toggleTheme = () => {
+    if (theme === "light") {
+      setTheme("dark");
+    } else {
+      setTheme("light");
+    }
+  };
 
   return (
-    <div {...props}>
+    <div className="relative" {...props}>
       <Sheet>
-        <SheetTrigger asChild>{children}</SheetTrigger>
+        {children}
         <SheetContent
           side={side}
-          className="w-2/3 rounded-lg px-0 py-6 md:absolute md:bottom-full md:left-10 md:top-10 md:mb-2 md:h-96 md:w-64"
+          container={portalContainer}
+          className="px-0 py-6 md:absolute md:left-2 md:top-10 md:h-96 md:w-64"
         >
           <SheetHeader className="sr-only">
-            <SheetTitle>Edit profile</SheetTitle>
+            <SheetTitle>A dialog for your account</SheetTitle>
             <SheetDescription>
-              Make changes to your profile here. Click save when you're done.
+              A dialog that contains some buttons to other pages, a option to
+              change theme, and a button to logout from the application
             </SheetDescription>
           </SheetHeader>
           <div className="space-y-2 text-sm text-primaryOnly">
@@ -65,11 +81,13 @@ function AccountMenu({
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
               <div className="flex flex-col">
-                <span className="text-base font-semibold">Aurora霏霏</span>
-                <span className="text-secondaryOnly">@aurora_hu</span>
+                <span className="text-base font-semibold">
+                  {user.firstName}
+                </span>
+                <span className="text-secondaryOnly">@{user.username}</span>
               </div>
             </div>
-            <Separator />
+            <Separator className="bg-primaryOnly" />
             <div className="px-2 text-sm">
               <SheetButton as="a" href="/car">
                 <CircleUserRound />
@@ -84,14 +102,17 @@ function AccountMenu({
                 <span>Settings</span>
               </SheetButton>
             </div>
-            <Separator />
+            <Separator className="bg-primaryOnly" />
             <div className="px-2">
-              <button className="flex w-full items-center gap-2 rounded-full p-2 hover:bg-primary-foreground hover:text-primary">
+              <button
+                onClick={toggleTheme}
+                className="flex w-full items-center gap-2 rounded-full p-2 hover:bg-primary-foreground hover:text-primary"
+              >
                 {iconTheme}
                 <span>{iconText}</span>
               </button>
             </div>
-            <Separator />
+            <Separator className="bg-primaryOnly" />
             <div className="px-2">
               <SheetButton as="button">
                 <LogOut />
@@ -115,7 +136,7 @@ function SheetButton({
   children: React.ReactNode;
 }) {
   const classes =
-    "flex items-center gap-2 rounded-full p-2 hover:bg-primary-foreground hover:text-primary w-full";
+    "flex items-center gap-2 rounded-full p-2 hover:bg-secondary hover:text-primary w-full";
 
   if (as === "a") {
     return (

@@ -7,42 +7,37 @@ import {
   MessageSquareText,
   Plus,
 } from "lucide-react";
+
+import { SheetTrigger } from "@/components/ui/sheet";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { NavLink } from "react-router-dom";
 import AccountMenu from "./accountMenu";
-import {
-  buttonClasses,
-  cn,
-  focusClasses,
-  focusVisibleClasses,
-} from "@/lib/utils";
+import { buttonClasses, cn, focusVisibleClasses } from "@/lib/utils";
 import { Button } from "./ui/button";
 
 const iconSize = 33;
 
 function Header() {
   return (
-    <header className="fixed bottom-0 z-20 order-2 h-header w-full text-[19px] md:sticky md:left-0 md:top-0 md:order-[0] md:h-[100dvh] md:w-16 md:justify-start md:p-0 lg:w-20 xl:w-[17.5rem]">
+    <header
+      id="header"
+      className="fixed bottom-0 z-20 order-2 h-header w-full text-[19px] md:sticky md:left-0 md:top-0 md:order-[0] md:h-[100dvh] md:w-16 md:justify-start md:p-0 lg:w-20 xl:w-[17.5rem]"
+    >
       <nav className="h-full w-full">
-        <ul className="flex h-full w-full items-center justify-between border-t-2 border-border bg-white px-4 py-0 md:flex-col md:justify-start md:gap-4 md:border-r-2 md:border-t-0 md:px-2 md:py-4 xl:items-start">
+        <ul className="flex h-full w-full items-center justify-between border-t-2 border-border bg-background px-4 py-0 md:flex-col md:justify-start md:gap-4 md:border-r-2 md:border-t-0 md:px-2 md:py-4 xl:items-start">
           <div className="flex w-full items-center justify-between gap-3 px-2 md:flex-col xl:items-start">
             <li className="hidden md:block md:w-full">
               <AccountMenu className="hidden md:block">
-                <Button
-                  className={cn(
-                    "hover:bg-transparent",
-                    buttonClasses,
-                    focusVisibleClasses,
-                  )}
-                >
-                  <Avatar className="hidden size-12 md:block">
+                <AccountTriggerButton className="hover:bg-background">
+                  <Avatar className="hidden size-14 hover:border-2 hover:border-primaryOnly md:block">
                     <AvatarImage
                       src="https://github.com/naesamo.png "
                       className="object-contain"
                     />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
-                </Button>
+                </AccountTriggerButton>
               </AccountMenu>
             </li>
             <IconButton href="/" name="Home">
@@ -70,35 +65,23 @@ function Header() {
             </IconButton>
             <li className="hidden md:block md:w-full">
               <AccountMenu>
-                <button
-                  className={cn(
-                    "hover:bg-secondary hover:text-primary",
-                    buttonClasses,
-                    focusVisibleClasses,
-                  )}
-                >
+                <AccountTriggerButton>
                   <CircleEllipsis className="!h-[33px] !w-[33px]" />
                   <span className="hidden text-[19px] xl:block">More</span>
-                </button>
+                </AccountTriggerButton>
               </AccountMenu>
             </li>
             <li className="md:hidden md:w-full">
               <AccountMenu>
-                <Button
-                  className={cn(
-                    "hover:bg-transparent",
-                    buttonClasses,
-                    focusVisibleClasses,
-                  )}
-                >
-                  <Avatar className="size-10">
+                <AccountTriggerButton className="hover:bg-background">
+                  <Avatar className="size-10 md:hidden">
                     <AvatarImage
                       src="https://github.com/naesamo.png "
                       className="object-contain"
                     />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
-                </Button>
+                </AccountTriggerButton>
               </AccountMenu>
             </li>
           </div>
@@ -108,6 +91,29 @@ function Header() {
         </ul>
       </nav>
     </header>
+  );
+}
+
+function AccountTriggerButton({
+  className,
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <SheetTrigger asChild>
+      <Button
+        className={cn(
+          "bg-background hover:bg-secondary hover:text-primary",
+          buttonClasses,
+          focusVisibleClasses,
+          className,
+        )}
+      >
+        {children}
+      </Button>
+    </SheetTrigger>
   );
 }
 
@@ -128,7 +134,7 @@ function IconButton({
         to={href}
         className={({ isActive }) =>
           cn(
-            "flex items-center justify-center gap-4 rounded-xl py-[8px] text-secondaryOnly hover:bg-primary-foreground hover:text-primary md:h-full md:w-full md:justify-center xl:justify-start",
+            "flex items-center justify-center gap-4 rounded-xl py-[8px] text-secondaryOnly hover:bg-secondary hover:text-primary md:h-full md:w-full md:justify-center xl:justify-start",
             className,
             // focusClasses,
             focusVisibleClasses,

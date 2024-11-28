@@ -7,6 +7,7 @@ import AuthProvider from "./provider/auth/AuthProvider";
 import ProfilePage from "./pages/ProfilePage";
 import ProtectedLayout from "./pages/ProtectedLayout";
 import { ThemeProvider } from "./provider/theme/ThemeProvider";
+import AuthUserProvider from "./provider/auth/AuthUserProvider";
 
 const router = createBrowserRouter([
   {
@@ -33,9 +34,11 @@ const router = createBrowserRouter([
 function App() {
   return (
     <AuthProvider>
-      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-        <RouterProvider router={router} />
-      </ThemeProvider>
+      <AuthUserProvider>
+        <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+          <RouterProvider router={router} />
+        </ThemeProvider>
+      </AuthUserProvider>
     </AuthProvider>
   );
 }
