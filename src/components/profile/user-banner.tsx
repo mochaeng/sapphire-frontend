@@ -27,14 +27,14 @@ function UserBanner() {
 
   return (
     <div className="relative">
-      <div className="text-profileHeader relative z-10 h-14 bg-transparent">
+      <div className="relative z-10 h-14 bg-transparent text-profileHeader">
         <div className="flex items-center gap-1 p-2">
-          <Button className="text-profileHeader bg-transparent shadow-none hover:bg-transparent">
+          <Button className="bg-transparent text-profileHeader shadow-none hover:bg-transparent">
             <span className="sr-only">back</span>
             <ArrowLeft className="!size-6" />
           </Button>
           <div className="font-bold">
-            <span className="text-sapphire">Aurora Fei-Fei</span>
+            <span className="text-sapphire">Jurídico Chaeyoung</span>
             <div className="flex gap-2 text-sm">
               <BannerStats className={headerStatsClasses} numbers={100}>
                 <UsersRound size={18} />
@@ -49,7 +49,7 @@ function UserBanner() {
           </div>
         </div>
       </div>
-      <div className="-mt-14 h-44 after:absolute after:inset-0 after:bg-gradient-to-b after:from-black after:to-secondaryOnly after:bg-[length:100%_144px] after:bg-no-repeat after:opacity-40 after:content-['']">
+      <div className="-mt-14 h-44 after:absolute after:inset-0 after:bg-gradient-to-b after:from-black after:bg-[length:100%_144px] after:bg-no-repeat after:opacity-40 after:content-['']">
         <img className="h-full w-full object-cover" src={bannerURL} />
       </div>
     </div>

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 function ProfilePage() {
   return (
     <div className="flex">
-      <div className="w-full max-w-centerWrapper bg-yellow-50">
+      <div className="w-full max-w-centerWrapper">
         <UserProfile />
       </div>
       <div className="hidden max-w-rightWrapper bg-blue-300 p-2 lg-2:flex lg-2:w-full">
