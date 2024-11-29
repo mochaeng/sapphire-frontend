@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
-import SigninForm from "./SigninForm";
-import SignupForm from "./SignupForm";
+import SigninForm from "./signin-form";
+import SignupForm from "./signup-form";
 import { Button } from "../ui/button";
 import { useState } from "react";
 

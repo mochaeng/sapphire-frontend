@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AuthContext } from "./AuthContext";
+import { AuthContext } from "./auth-context";
 import { authStatus } from "@/lib/api/auth";
 
 export default function AuthProvider({

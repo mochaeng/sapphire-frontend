@@ -3,7 +3,7 @@ import {
   Theme,
   ThemeProviderContext,
   ThemeProviderProps,
-} from "./ThemeContext";
+} from "./theme-context";
 
 export function ThemeProvider({
   children,

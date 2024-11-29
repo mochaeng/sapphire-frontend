@@ -1,8 +1,6 @@
-import AuthFormButton from "./AuthFormButton";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { SignupPayload } from "@/lib/api/payloads";
-import { signupFormSchema } from "@/lib/authValidation";
 import { ConflictError, DefaultError } from "@/lib/api/errors";
 import { signup } from "@/lib/api/auth";
 import {
@@ -17,6 +15,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { signupFormSchema } from "@/lib/auth-validation";
+import AuthFormButton from "./auth-form-button";
 
 function SignupForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -139,7 +139,7 @@ function SignupForm() {
           )}
         />
         {isSubmitting && (
-          <p className="text-center text-primary text-sm">Loading...</p>
+          <p className="text-center text-sm text-primary">Loading...</p>
         )}
         {!isSubmitting && error && (
           <p className="text-center text-sm text-rose-500">{error}</p>

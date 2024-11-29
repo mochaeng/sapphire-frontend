@@ -1,4 +1,4 @@
-import UserBanner from "./userBanner";
+import UserBanner from "./user-banner";
 
 function UserProfile() {
   return (

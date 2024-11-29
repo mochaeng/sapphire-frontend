@@ -12,7 +12,7 @@ import { SheetTrigger } from "@/components/ui/sheet";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { NavLink } from "react-router-dom";
-import AccountMenu from "./accountMenu";
+import AccountMenu from "./account-menu";
 import { buttonClasses, cn, focusVisibleClasses } from "@/lib/utils";
 import { Button } from "./ui/button";
 

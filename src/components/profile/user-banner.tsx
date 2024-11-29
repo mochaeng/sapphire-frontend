@@ -49,7 +49,7 @@ function UserBanner() {
           </div>
         </div>
       </div>
-      <div className="-mt-14 h-44 after:absolute after:inset-0 after:bg-gradient-to-b after:from-black after:to-[rgba(138,150,163,0)] after:bg-[length:100%_144px] after:bg-no-repeat after:opacity-40 after:content-['']">
+      <div className="-mt-14 h-44 after:absolute after:inset-0 after:bg-gradient-to-b after:from-black after:to-secondaryOnly after:bg-[length:100%_144px] after:bg-no-repeat after:opacity-40 after:content-['']">
         <img className="h-full w-full object-cover" src={bannerURL} />
       </div>
     </div>

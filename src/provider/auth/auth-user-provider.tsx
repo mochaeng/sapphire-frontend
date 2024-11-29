@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { AuthUserContext, AuthUser } from "./UserContext";
+import { AuthUserContext, AuthUser } from "./user-context";
 import { authMe } from "@/lib/api/auth";
 import { DefaultError, ServerError, UnauthorizedError } from "@/lib/api/errors";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/hooks/use-auth";
 import { AuthMeResponseSchema } from "@/lib/api/responses";
 
 export default function AuthUserProvider({

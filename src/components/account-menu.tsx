@@ -7,7 +7,7 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { Separator } from "./ui/separator";
 import { Link } from "react-router-dom";
 import {
@@ -20,8 +20,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
-import { useTheme } from "@/hooks/useTheme";
-import { useAuthUser } from "@/hooks/useAuthUser";
+import { useTheme } from "@/hooks/use-theme";
+import { useAuthUser } from "@/hooks/use-auth-user";
 
 function AccountMenu({
   children,

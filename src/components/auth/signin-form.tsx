@@ -1,13 +1,13 @@
-import AuthFormButton from "./AuthFormButton";
+import AuthFormButton from "./auth-form-button";
 import { useNavigate } from "react-router-dom";
 import { SigninPayload } from "@/lib/api/payloads";
 import { signin } from "@/lib/api/auth";
 import { useState } from "react";
 import { DefaultError, WrongEmailOrPasswordError } from "@/lib/api/errors";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/hooks/use-auth";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { signinFormSchema } from "@/lib/authValidation";
+import { signinFormSchema } from "@/lib/auth-validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -106,7 +106,7 @@ function SigninForm() {
           )}
         />
         {isSubmitting && (
-          <p className="text-center text-primary text-sm">Loading...</p>
+          <p className="text-center text-sm text-primary">Loading...</p>
         )}
         {!isSubmitting && error && (
           <p className="text-center text-sm text-rose-500">{error}</p>
