@@ -11,6 +11,7 @@ body {
     /* my own variables */
     --vh: 8.44px;
     --header-height: 3.5rem;
+    --header-with-offset: 4rem;
     /* colors */
     --primary-only: 228, 6%, 15%;
     --secondary-only: 211, 12%, 59%;

@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 function ProfilePage() {
   return (
-    <div className="flex">
+    <div className="pb-headerWithOffset flex md:pb-0">
       <div className="w-full max-w-centerWrapper">
         <UserProfile />
       </div>

@@ -72,6 +72,7 @@ export default {
       },
       height: {
         header: "calc(var(--header-height))",
+        offset: "calc(var(--header-with-offset))",
       },
       maxWidth: {
         authForm: "344px",
@@ -90,6 +91,7 @@ export default {
       },
       padding: {
         header: "calc(var(--header-height))",
+        headerWithOffset: "calc(var(--header-with-offset))",
       },
     },
   },

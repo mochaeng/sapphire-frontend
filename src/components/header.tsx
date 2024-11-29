@@ -25,7 +25,7 @@ function Header() {
       className="fixed bottom-0 z-20 order-2 h-header w-full text-[19px] md:sticky md:left-0 md:top-0 md:order-[0] md:h-[100dvh] md:w-16 md:justify-start md:p-0 lg:w-20 xl:w-[17.5rem]"
     >
       <nav className="h-full w-full">
-        <ul className="flex h-full w-full items-center justify-between border-t-2 border-border bg-background px-4 py-0 md:flex-col md:justify-start md:gap-4 md:border-r-2 md:border-t-0 md:px-2 md:py-4 xl:items-start">
+        <ul className="flex h-full w-full items-center justify-between border-t-1 border-[#8a96a3]/25 bg-background px-4 py-0 md:flex-col md:justify-start md:gap-4 md:border-r-2 md:border-t-0 md:px-2 md:py-4 xl:items-start">
           <div className="flex w-full items-center justify-between gap-3 px-2 md:flex-col xl:items-start">
             <li className="hidden md:block md:w-full">
               <AccountMenu className="hidden md:block">
