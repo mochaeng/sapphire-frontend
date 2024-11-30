@@ -10,13 +10,13 @@ function Root() {
     return <Outlet />;
   } else {
     return (
-      <div className="flex w-full max-w-sapphire justify-center">
+      <div className="flex h-full w-full max-w-sapphire justify-center overflow-auto">
         <Header />
-        <div className="flex w-full max-w-[1016px]">
+        <main className="flex w-full max-w-[1016px]">
           <div className="h-10 w-full bg-rose-600">
             <Outlet />
           </div>
-        </div>
+        </main>
       </div>
     );
   }
