@@ -2,13 +2,16 @@ import { Separator } from "../ui/separator";
 import HeaderPost from "./header-post";
 import FooterPost from "./footer-post";
 
-function ContentPost({ children }: { children: React.ReactNode }) {
+function ContentPost({
+  children,
+  ...props
+}: { children: React.ReactNode } & React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div>
-      <div className="px-4 pb-2">
+    <div {...props}>
+      <div className="pb-3">
         <div className="h-3"></div>
         <HeaderPost />
-        {children}
+        <div className="mt-3">{children}</div>
         <FooterPost />
       </div>
       <Separator className="bg-secondaryOnly opacity-25" />

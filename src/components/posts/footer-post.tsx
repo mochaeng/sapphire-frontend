@@ -2,7 +2,7 @@ import { Heart, MessageSquare } from "lucide-react";
 
 function FooterPost() {
   return (
-    <>
+    <div className="px-4">
       <div className="mt-4 flex items-center gap-4 text-secondaryOnly">
         <Heart />
         <MessageSquare />
@@ -12,7 +12,7 @@ function FooterPost() {
         <span className="opacity-90">&#8226;</span>
         <span>4 comments</span>
       </div>
-    </>
+    </div>
   );
 }
 
