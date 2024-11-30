@@ -9,7 +9,7 @@ body {
 @layer base {
   :root {
     /* my own variables */
-    --vh: 8.44px;
+    /* --vh: 6.67px; */
     --header-height: 3.5rem;
     --header-with-offset: 4rem;
     /* colors */
