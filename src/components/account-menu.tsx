@@ -85,7 +85,7 @@ function AccountMenu({
                     <AvatarFallback>CN</AvatarFallback>
                   </>
                 ) : (
-                  <CircleUserRound className="!size-12 bg-white text-secondaryOnly" />
+                  <CircleUserRound className="!size-12 text-primaryOnly" />
                 )}
               </Avatar>
               {user.isAuthenticated && (

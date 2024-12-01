@@ -24,10 +24,10 @@ function Root() {
     return <Outlet />;
   } else {
     return (
-      <div className="mx-auto flex h-full max-w-sapphire lg-2:w-full">
+      <div className="mx-auto flex h-full max-w-sapphire overflow-y-scroll lg-2:w-full">
         <Header />
-        <main className="w-full max-w-[1016px] overflow-auto">
-          <div className="h-10 w-full">
+        <main className="w-full max-w-[1016px]">
+          <div className="h-full w-full">
             <Outlet />
           </div>
         </main>

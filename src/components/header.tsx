@@ -19,13 +19,17 @@ import { useAuthUser } from "@/hooks/use-auth-user";
 
 const iconSize = 33;
 
-function Header() {
+function Header({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   const { user } = useAuthUser();
 
   return (
     <header
+      {...props}
       id="header"
-      className="fixed bottom-0 z-20 order-2 h-header w-full text-[19px] md:sticky md:top-0 md:order-[0] md:h-[100dvh] md:w-16 md:justify-start md:p-0 lg:w-20 xl:w-[17.5rem]"
+      className={cn(
+        "fixed bottom-0 z-20 order-2 h-header w-full text-[19px] md:sticky md:top-0 md:order-[0] md:h-[100dvh] md:w-16 md:max-w-[280px] md:justify-start md:p-0 lg:w-20 xl:w-[17.5rem]",
+        className,
+      )}
     >
       <nav className="h-full w-full">
         <ul className="flex h-full w-full items-center justify-between border-t-1 border-[#8a96a3]/25 bg-background px-4 py-0 md:flex-col md:justify-start md:gap-4 md:border-r-2 md:border-t-0 md:px-2 md:py-4 xl:items-start">
