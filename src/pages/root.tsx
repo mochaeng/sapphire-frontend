@@ -1,10 +1,11 @@
 import Header from "@/components/header";
-import { useAuth } from "@/hooks/use-auth";
+// import { useAuth } from "@/hooks/use-auth";
+import { useAuthUser } from "@/hooks/use-auth-user";
 import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 
 function Root() {
-  const { isAuthenticated } = useAuth();
+  const { user } = useAuthUser();
   const location = useLocation();
 
   useEffect(() => {
@@ -19,14 +20,14 @@ function Root() {
     return () => window.removeEventListener("resize", updateViewPortHeight);
   }, []);
 
-  if (!isAuthenticated && location.pathname === "/") {
+  if (!user.isAuthenticated && location.pathname === "/") {
     return <Outlet />;
   } else {
     return (
-      <div className="flex h-full max-w-sapphire justify-center overflow-auto lg-2:w-full">
+      <div className="mx-auto flex h-full max-w-sapphire lg-2:w-full">
         <Header />
-        <main className="w-full max-w-[1016px]">
-          <div className="h-10 w-full bg-rose-600">
+        <main className="w-full max-w-[1016px] overflow-auto">
+          <div className="h-10 w-full">
             <Outlet />
           </div>
         </main>

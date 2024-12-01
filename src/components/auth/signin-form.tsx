@@ -4,7 +4,7 @@ import { SigninPayload } from "@/lib/api/payloads";
 import { signin } from "@/lib/api/auth";
 import { useState } from "react";
 import { DefaultError, WrongEmailOrPasswordError } from "@/lib/api/errors";
-import { useAuth } from "@/hooks/use-auth";
+// import { useAuth } from "@/hooks/use-auth";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { signinFormSchema } from "@/lib/auth-validation";
@@ -18,11 +18,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useAuthUser } from "@/hooks/use-auth-user";
 
 function SigninForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const { setIsAuthenticated } = useAuth();
+  // const { setIsAuthenticated } = useAuth();
+  const { user, setUser } = useAuthUser();
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof signinFormSchema>>({
@@ -40,7 +42,8 @@ function SigninForm() {
 
   const onSubmit = (values: z.infer<typeof signinFormSchema>) => {
     setError("");
-    setIsAuthenticated(false);
+    // setIsAuthenticated(false);
+    setUser({ ...user, isAuthenticated: false });
 
     async function fetchSignin() {
       setIsSubmitting(true);
@@ -52,7 +55,8 @@ function SigninForm() {
 
       try {
         await signin(payload);
-        setIsAuthenticated(true);
+        // setIsAuthenticated(true);
+        setUser({ ...user, isAuthenticated: true });
         navigate("/");
       } catch (err) {
         if (err instanceof DefaultError) {
@@ -62,7 +66,8 @@ function SigninForm() {
           form.setError("email", { message: "" });
           form.setError("password", { message: err.message });
         }
-        setIsAuthenticated(false);
+        // setIsAuthenticated(false);
+        setUser({ ...user, isAuthenticated: false });
       } finally {
         setIsSubmitting(false);
       }

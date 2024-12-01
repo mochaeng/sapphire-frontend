@@ -15,10 +15,13 @@ import { NavLink } from "react-router-dom";
 import AccountMenu from "./account-menu";
 import { buttonClasses, cn, focusVisibleClasses } from "@/lib/utils";
 import { Button } from "./ui/button";
+import { useAuthUser } from "@/hooks/use-auth-user";
 
 const iconSize = 33;
 
 function Header() {
+  const { user } = useAuthUser();
+
   return (
     <header
       id="header"
@@ -30,12 +33,18 @@ function Header() {
             <li className="hidden md:block md:w-full">
               <AccountMenu className="hidden md:block">
                 <AccountTriggerButton className="hover:bg-background">
-                  <Avatar className="hidden size-14 hover:border-2 hover:border-primaryOnly md:block">
-                    <AvatarImage
-                      src="https://github.com/naesamo.png "
-                      className="object-contain"
-                    />
-                    <AvatarFallback>CN</AvatarFallback>
+                  <Avatar className="hidden size-10 items-center justify-center hover:border-2 hover:border-primaryOnly md:flex">
+                    {user.isAuthenticated ? (
+                      <>
+                        <AvatarImage
+                          src="https://github.com/naesamo.png "
+                          className="object-contain"
+                        />
+                        <AvatarFallback>CN</AvatarFallback>
+                      </>
+                    ) : (
+                      <CircleUserRound className="!size-10" size={iconSize} />
+                    )}
                   </Avatar>
                 </AccountTriggerButton>
               </AccountMenu>
@@ -43,26 +52,34 @@ function Header() {
             <IconButton href="/" name="Home">
               <Home size={iconSize} />
             </IconButton>
-            <IconButton href="/my/notifications" name="Notifications">
-              <Bell size={iconSize} />
-            </IconButton>
-            <IconButton
-              href="/posts/create"
-              name="NEW POST"
-              className="md:hidden"
-            >
-              <CirclePlus size={iconSize} />
-            </IconButton>
-            <IconButton href="/my/messages" name="Messages">
-              <MessageSquareText size={iconSize} />
-            </IconButton>
-            <IconButton
-              href="/hutao"
-              name="My profile"
-              className="hidden md:flex"
-            >
-              <CircleUserRound size={iconSize} />
-            </IconButton>
+            {user.isAuthenticated && (
+              <IconButton href="/my/notifications" name="Notifications">
+                <Bell size={iconSize} />
+              </IconButton>
+            )}
+            {user.isAuthenticated && (
+              <IconButton
+                href="/posts/create"
+                name="NEW POST"
+                className="md:hidden"
+              >
+                <CirclePlus size={iconSize} />
+              </IconButton>
+            )}
+            {user.isAuthenticated && (
+              <IconButton href="/my/messages" name="Messages">
+                <MessageSquareText size={iconSize} />
+              </IconButton>
+            )}
+            {user.isAuthenticated && (
+              <IconButton
+                href="/hutao"
+                name="My profile"
+                className="hidden md:flex"
+              >
+                <CircleUserRound size={iconSize} />
+              </IconButton>
+            )}
             <li className="hidden md:block md:w-full">
               <AccountMenu>
                 <AccountTriggerButton>

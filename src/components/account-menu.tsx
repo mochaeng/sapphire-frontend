@@ -64,7 +64,7 @@ function AccountMenu({
         <SheetContent
           side={side}
           container={portalContainer}
-          className="px-0 py-6 md:absolute md:left-2 md:top-10 md:h-96 md:w-64"
+          className="px-0 py-6 md:absolute md:left-2 md:top-10 md:h-96 md:w-64 md:rounded-md"
         >
           <SheetHeader className="sr-only">
             <SheetTitle>A dialog for your account</SheetTitle>
@@ -76,34 +76,46 @@ function AccountMenu({
           <div className="space-y-2 text-sm text-primaryOnly">
             <div className="space-y-2 px-4">
               <Avatar className="-mt-1 size-12">
-                <AvatarImage
-                  src="https://github.com/naesamo.png "
-                  className="object-contain"
-                />
-                <AvatarFallback>CN</AvatarFallback>
+                {user.isAuthenticated ? (
+                  <>
+                    <AvatarImage
+                      src="https://github.com/naesamo.png "
+                      className="object-contain"
+                    />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </>
+                ) : (
+                  <CircleUserRound className="!size-12 bg-white text-secondaryOnly" />
+                )}
               </Avatar>
-              <div className="flex flex-col">
-                <span className="text-base font-semibold">
-                  {user.firstName}
-                </span>
-                <span className="text-secondaryOnly">@{user.username}</span>
-              </div>
+              {user.isAuthenticated && (
+                <div className="flex flex-col">
+                  <span className="text-base font-semibold">
+                    {user.firstName}
+                  </span>
+                  <span className="text-secondaryOnly">@{user.username}</span>
+                </div>
+              )}
             </div>
-            <Separator className={separatorClasses} />
-            <div className="px-2 text-sm">
-              <SheetButton as="a" href="/car">
-                <CircleUserRound />
-                <span>My profile</span>
-              </SheetButton>
-              <SheetButton as="a" href="/">
-                <Bookmark />
-                <span>Collections</span>
-              </SheetButton>
-              <SheetButton as="a" href="/">
-                <Settings />
-                <span>Settings</span>
-              </SheetButton>
-            </div>
+            {user.isAuthenticated && (
+              <>
+                <Separator className={separatorClasses} />
+                <div className="px-2 text-sm">
+                  <SheetButton as="a" href="/car">
+                    <CircleUserRound />
+                    <span>My profile</span>
+                  </SheetButton>
+                  <SheetButton as="a" href="/">
+                    <Bookmark />
+                    <span>Collections</span>
+                  </SheetButton>
+                  <SheetButton as="a" href="/">
+                    <Settings />
+                    <span>Settings</span>
+                  </SheetButton>
+                </div>
+              </>
+            )}
             <Separator className={separatorClasses} />
             <div className="px-2">
               <button

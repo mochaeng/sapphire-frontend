@@ -1,4 +1,5 @@
 import UserProfile from "@/components/profile/user-profile";
+import RightSidebar from "@/components/right-sidebar";
 import { Button } from "@/components/ui/button";
 
 function ProfilePage() {
@@ -8,12 +9,10 @@ function ProfilePage() {
         <UserProfile />
       </div>
 
-      <div className="bg-rose hidden lg-2:flex lg-2:w-full lg-2:max-w-rightWrapper lg-2:justify-center">
-        <div className="flex h-screen w-full max-w-[378px] flex-col p-4 lg-2:sticky lg-2:top-0">
-          <span className="text-primaryOnly">Subscription</span>
-          <Button>Subscribe</Button>
-        </div>
-      </div>
+      <RightSidebar>
+        <span className="text-primaryOnly">Subscription</span>
+        <Button>Subscribe</Button>
+      </RightSidebar>
     </div>
   );
 }

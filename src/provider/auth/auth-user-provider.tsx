@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { AuthUserContext, AuthUser } from "./user-context";
 import { authMe } from "@/lib/api/auth";
 import { DefaultError, ServerError, UnauthorizedError } from "@/lib/api/errors";
-import { useAuth } from "@/hooks/use-auth";
+// import { useAuth } from "@/hooks/use-auth";
 import { AuthMeResponseSchema } from "@/lib/api/responses";
 
 export default function AuthUserProvider({
@@ -12,7 +12,7 @@ export default function AuthUserProvider({
 }) {
   const [user, setUser] = useState({} as AuthUser);
   const [isLoading, setIsLoading] = useState(true);
-  const { setIsAuthenticated } = useAuth();
+  // const { setIsAuthenticated } = useAuth();
 
   useEffect(() => {
     async function getAuthUserInfo() {
@@ -28,6 +28,7 @@ export default function AuthUserProvider({
           lastName: parsed.data.last_name || "",
           username: parsed.data.username,
           roleName: parsed.data.role_name,
+          isAuthenticated: true,
         };
         setUser(user);
       } catch (error) {
@@ -35,7 +36,8 @@ export default function AuthUserProvider({
           error instanceof UnauthorizedError ||
           error instanceof ServerError
         ) {
-          setIsAuthenticated(false);
+          // setIsAuthenticated(false);
+          setUser({ ...user, isAuthenticated: false });
         }
       } finally {
         setIsLoading(false);
@@ -43,7 +45,7 @@ export default function AuthUserProvider({
     }
 
     getAuthUserInfo();
-  }, [setIsAuthenticated]);
+  }, [user]);
 
   if (isLoading) {
     return <div>Loading...</div>;

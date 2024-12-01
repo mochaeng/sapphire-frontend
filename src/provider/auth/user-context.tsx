@@ -6,6 +6,7 @@ export type AuthUser = {
   firstName: string;
   lastName: string;
   roleName: string;
+  isAuthenticated: boolean;
 };
 
 export type AuthUserState = {
