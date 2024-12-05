@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 function ProfilePage() {
   return (
-    <div className="flex justify-center pb-headerWithOffset md:pb-0">
+    <div className="flex pb-headerWithOffset md:pb-0">
       <div className="flex w-full max-w-centerWrapper">
         <UserProfile />
       </div>
