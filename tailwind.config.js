@@ -83,7 +83,7 @@ export default {
         rightWrapper: "384px",
       },
       maxHeight: {
-        post: "calc(var(--vh, 1vh)*100 - 120px)",
+        post: "calc(var(--vh, 1vh)*100 - 130px)",
       },
       fontSize: {
         fontPrimary: "19px",

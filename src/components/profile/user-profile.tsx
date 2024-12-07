@@ -6,10 +6,12 @@ import postImageURL from "@/assets/chaeyoung.jpg";
 import postImageURL2 from "@/assets/twice.jpg";
 import TextPost from "../posts/text-post";
 import ImagePost from "../posts/image-post";
+import UserHeader from "./user-header";
 
 function UserProfile() {
   return (
     <div className="border-r-1 border-[#8a96a3]/25">
+      <UserHeader />
       <UserBanner />
       <UserInfo />
       <Separator className="h-2 border-y-1 border-black bg-secondaryOnly opacity-25" />

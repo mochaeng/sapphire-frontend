@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { AuthUserContext, AuthUser } from "./user-context";
 import { authMe } from "@/lib/api/auth";
 import { DefaultError, ServerError, UnauthorizedError } from "@/lib/api/errors";
-// import { useAuth } from "@/hooks/use-auth";
 import { AuthMeResponseSchema } from "@/lib/api/responses";
 
 export default function AuthUserProvider({
@@ -12,7 +11,6 @@ export default function AuthUserProvider({
 }) {
   const [user, setUser] = useState({} as AuthUser);
   const [isLoading, setIsLoading] = useState(true);
-  // const { setIsAuthenticated } = useAuth();
 
   useEffect(() => {
     async function getAuthUserInfo() {
@@ -36,8 +34,7 @@ export default function AuthUserProvider({
           error instanceof UnauthorizedError ||
           error instanceof ServerError
         ) {
-          // setIsAuthenticated(false);
-          setUser({ ...user, isAuthenticated: false });
+          setUser((u) => ({ ...u, isAuthenticated: false }));
         }
       } finally {
         setIsLoading(false);
@@ -45,7 +42,7 @@ export default function AuthUserProvider({
     }
 
     getAuthUserInfo();
-  }, [user]);
+  }, []);
 
   if (isLoading) {
     return <div>Loading...</div>;

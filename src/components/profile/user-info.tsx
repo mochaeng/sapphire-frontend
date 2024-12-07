@@ -20,7 +20,7 @@ function UserInfo() {
           <AvatarImage src={profileURL} className="object-cover" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
-        <Button className="size-12 rounded-full bg-background hover:border hover:border-primary hover:bg-background">
+        <Button className="size-12 rounded-full border border-[#8a96a3]/25 bg-background hover:border hover:border-primary hover:bg-background">
           <ExternalLink className="!size-6 text-primary" />
         </Button>
       </div>

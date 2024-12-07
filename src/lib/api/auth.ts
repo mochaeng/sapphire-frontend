@@ -72,6 +72,7 @@ export async function authStatus() {
 }
 
 export async function authMe() {
+  console.log("calling authMe");
   const response = await fetch(`${API_URL}/v1/auth/me`, {
     method: "POST",
     headers: {

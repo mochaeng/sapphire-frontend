@@ -8,6 +8,8 @@ function Root() {
   const { user } = useAuthUser();
   const location = useLocation();
 
+  console.log("wtf");
+
   useEffect(() => {
     const updateViewPortHeight = () => {
       const vh = window.innerHeight * 0.01;

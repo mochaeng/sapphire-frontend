@@ -33,13 +33,11 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    // <AuthProvider>
     <AuthUserProvider>
       <ThemeProvider defaultTheme="light" storageKey="sapphire-ui-theme">
         <RouterProvider router={router} />
       </ThemeProvider>
     </AuthUserProvider>
-    // </AuthProvider>
   );
 }
 
