@@ -7,13 +7,14 @@ import postImageURL2 from "@/assets/twice.jpg";
 import TextPost from "../posts/text-post";
 import ImagePost from "../posts/image-post";
 import UserHeader from "./user-header";
+import { UserProfileInfo } from "@/lib/types";
 
-function UserProfile() {
+function UserProfile({ profile }: { profile: UserProfileInfo }) {
   return (
     <div className="border-r-1 border-[#8a96a3]/25">
-      <UserHeader />
+      <UserHeader profile={profile} />
       <UserBanner />
-      <UserInfo />
+      <UserInfo profile={profile} />
       <Separator className="h-2 border-y-1 border-black bg-secondaryOnly opacity-25" />
 
       <ContentPost>

@@ -9,6 +9,7 @@ export default {
         primaryOnly: "hsl(var(--primary-only))",
         secondaryOnly: "hsl(var(--secondary-only))",
         profileHeader: "hsl(var(--profile-header))",
+        secondaryOnlyPlaceholder: "hsla(var(--secondary-only-placeholder))",
 
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

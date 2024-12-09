@@ -77,7 +77,7 @@ function Header({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
             )}
             {user.isAuthenticated && (
               <IconButton
-                href="/hutao"
+                href={`${user.username}`}
                 name="My profile"
                 className="hidden md:flex"
               >

@@ -5,7 +5,6 @@ import ErrorPage from "./pages/error-page";
 import HomePage from "./pages/home-page";
 import ProfilePage from "./pages/profile-page";
 import ProtectedLayout from "./pages/protected-layout";
-// import AuthProvider from "./provider/auth/auth-provider";
 import AuthUserProvider from "./provider/auth/auth-user-provider";
 import { ThemeProvider } from "./provider/theme/theme-provider";
 

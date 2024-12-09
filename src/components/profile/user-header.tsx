@@ -8,6 +8,7 @@ import {
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
+import { UserProfileInfo } from "@/lib/types";
 
 function BannerStats({
   numbers,
@@ -26,9 +27,11 @@ function BannerStats({
   );
 }
 
-function UserHeader() {
+function UserHeader({ profile }: { profile: UserProfileInfo }) {
   const [prevScrollpos, setPrevScrollpos] = useState(0);
   const [isStyckyHeader, setIsStyckyHeader] = useState(false);
+
+  const fullName = `${profile.firstName} ${profile.lastName || ""}`;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -73,7 +76,7 @@ function UserHeader() {
           <ArrowLeft className="!size-6" />
         </Button>
         <div className="font-bold">
-          <span className="text-sapphire">Jurídico Chaeyoung</span>
+          <span className="text-sapphire">{fullName}</span>
           <div className={cn("flex gap-2 text-sm", { hidden: isStyckyHeader })}>
             <BannerStats className={headerStatsClasses} numbers={100}>
               <UsersRound size={18} />

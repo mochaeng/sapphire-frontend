@@ -15,6 +15,7 @@ body {
     /* colors */
     --primary-only: 228, 6%, 15%;
     --secondary-only: 211, 12%, 59%;
+    --secondary-only-placeholder: 211, 12%, 59%, 0.12;
     --profile-header: 0, 0%, 100%;
     /* ------ */
 

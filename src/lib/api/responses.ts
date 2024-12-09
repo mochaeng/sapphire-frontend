@@ -7,3 +7,16 @@ export const AuthMeResponseSchema = z.object({
   last_name: z.string().optional(),
   role_name: z.string(),
 });
+
+export const UserProfileResponseSchema = z.object({
+  username: z.string(),
+  first_name: z.string(),
+  last_name: z.string().optional(),
+  description: z.string().optional(),
+  banner_url: z.string().url().optional(),
+  avatar_url: z.string().url().optional(),
+  location: z.string().optional(),
+  user_link: z.string().url().optional(),
+  created_at: z.string(),
+  updated_at: z.string(),
+});

@@ -33,6 +33,13 @@ export class WrongEmailOrPasswordError extends Error {
   }
 }
 
+export class ProfileNotFoundError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "ProfileNotFound";
+  }
+}
+
 export const tryAgainError = new DefaultError(
   "An error occurred. Please try again",
 );

@@ -17,6 +17,7 @@ import {
   Moon,
   Settings,
   Sun,
+  User,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
@@ -75,17 +76,21 @@ function AccountMenu({
           </SheetHeader>
           <div className="space-y-2 text-sm text-primaryOnly">
             <div className="space-y-2 px-4">
-              <Avatar className="-mt-1 size-12">
+              <Avatar className="-mt-1 size-12 bg-background">
                 {user.isAuthenticated ? (
                   <>
                     <AvatarImage
-                      src="https://github.com/naesamo.png "
+                      src="https://github.com/naesamo.png"
                       className="object-contain"
                     />
-                    <AvatarFallback>CN</AvatarFallback>
+                    <AvatarFallback className="bg-secondaryOnlyPlaceholder text-lg text-primary">
+                      CN
+                    </AvatarFallback>
                   </>
                 ) : (
-                  <CircleUserRound className="!size-12 text-primaryOnly" />
+                  <div className="bg-secondaryOnlyPlaceholder">
+                    <User className="!size-12 p-2 text-secondaryOnly" />
+                  </div>
                 )}
               </Avatar>
               {user.isAuthenticated && (
@@ -101,7 +106,7 @@ function AccountMenu({
               <>
                 <Separator className={separatorClasses} />
                 <div className="px-2 text-sm">
-                  <SheetButton as="a" href="/car">
+                  <SheetButton as="a" href={`${user.username}`}>
                     <CircleUserRound />
                     <span>My profile</span>
                   </SheetButton>
@@ -130,7 +135,7 @@ function AccountMenu({
             <div className="px-2">
               <SheetButton as="button">
                 <LogOut />
-                <span>Logout</span>
+                <span>{user.isAuthenticated ? "Logout" : "Login"}</span>
               </SheetButton>
             </div>
           </div>

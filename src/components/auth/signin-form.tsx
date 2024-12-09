@@ -1,10 +1,9 @@
 import AuthFormButton from "./auth-form-button";
 import { useNavigate } from "react-router-dom";
 import { SigninPayload } from "@/lib/api/payloads";
-import { signin } from "@/lib/api/auth";
+import { authMe, signin } from "@/lib/api/auth";
 import { useState } from "react";
 import { DefaultError, WrongEmailOrPasswordError } from "@/lib/api/errors";
-// import { useAuth } from "@/hooks/use-auth";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { signinFormSchema } from "@/lib/auth-validation";
@@ -19,6 +18,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useAuthUser } from "@/hooks/use-auth-user";
+import { AuthMeResponseSchema } from "@/lib/api/responses";
+import { AuthUser } from "@/provider/auth/user-context";
 
 function SigninForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -42,7 +43,6 @@ function SigninForm() {
 
   const onSubmit = (values: z.infer<typeof signinFormSchema>) => {
     setError("");
-    // setIsAuthenticated(false);
     setUser({ ...user, isAuthenticated: false });
 
     async function fetchSignin() {
@@ -55,8 +55,20 @@ function SigninForm() {
 
       try {
         await signin(payload);
-        // setIsAuthenticated(true);
-        setUser({ ...user, isAuthenticated: true });
+        const me = await authMe();
+        const parsed = AuthMeResponseSchema.safeParse(me.data);
+        if (!parsed.success) {
+          throw new DefaultError("fail parsing");
+        }
+        const user: AuthUser = {
+          email: parsed.data.email,
+          firstName: parsed.data.first_name,
+          lastName: parsed.data.last_name || "",
+          username: parsed.data.username,
+          roleName: parsed.data.role_name,
+          isAuthenticated: true,
+        };
+        setUser(user);
         navigate("/");
       } catch (err) {
         if (err instanceof DefaultError) {
@@ -66,7 +78,6 @@ function SigninForm() {
           form.setError("email", { message: "" });
           form.setError("password", { message: err.message });
         }
-        // setIsAuthenticated(false);
         setUser({ ...user, isAuthenticated: false });
       } finally {
         setIsSubmitting(false);

@@ -1,5 +1,6 @@
 import {
   ConflictError,
+  ProfileNotFoundError,
   ServerError,
   tryAgainError,
   UnauthorizedError,
@@ -89,6 +90,22 @@ export async function authMe() {
   }
   if (response.status === 500) {
     throw new ServerError();
+  }
+  throw tryAgainError;
+}
+
+export async function userProfile(username: string) {
+  const response = await fetch(`${API_URL}/v1/user/profile/${username}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (response.status === 201) {
+    const data = await response.json();
+    return data;
+  }
+  if (response.status === 404) {
+    throw new ProfileNotFoundError("Profile was not found");
   }
   throw tryAgainError;
 }
