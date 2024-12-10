@@ -2,11 +2,10 @@ import { ExternalLink, Link, MapPin } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { UserProfileInfo } from "@/lib/types";
-import UserDescription from "./user-info-description";
 import { useEffect, useRef, useState } from "react";
 
-// const profileURL = "https://i.redd.it/n6t768hnhr3e1.png";
-const profileURL = "";
+const profileURL = "https://i.redd.it/n6t768hnhr3e1.png";
+// const profileURL = "";
 
 function UserInfo({ profile }: { profile: UserProfileInfo }) {
   const fullName = `${profile.firstName} ${profile.lastName || ""}`;

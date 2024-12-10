@@ -10,6 +10,8 @@ export default {
         secondaryOnly: "hsl(var(--secondary-only))",
         profileHeader: "hsl(var(--profile-header))",
         secondaryOnlyPlaceholder: "hsla(var(--secondary-only-placeholder))",
+        buttonOverlay: "hsla(var(--button-overlay))",
+        primaryOverlay: "hsla(var(--primary-overlay))",
 
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

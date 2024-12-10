@@ -9,6 +9,7 @@ import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { UserProfileInfo } from "@/lib/types";
+import { useNavigate } from "react-router-dom";
 
 function BannerStats({
   numbers,
@@ -30,6 +31,7 @@ function BannerStats({
 function UserHeader({ profile }: { profile: UserProfileInfo }) {
   const [prevScrollpos, setPrevScrollpos] = useState(0);
   const [isStyckyHeader, setIsStyckyHeader] = useState(false);
+  const navigate = useNavigate();
 
   const fullName = `${profile.firstName} ${profile.lastName || ""}`;
 
@@ -60,22 +62,26 @@ function UserHeader({ profile }: { profile: UserProfileInfo }) {
       className={cn(
         "sticky -top-14 z-10 -mb-14 flex h-14 w-full items-center justify-between bg-transparent text-profileHeader",
         {
-          "top-0 border-b-1 border-[#8a96a3]/25 bg-background text-primaryOnly":
+          "top-0 border-b-1 border-[#8a96a3]/25 bg-background text-primaryOnly transition-all ease-in-out":
             isStyckyHeader,
         },
       )}
     >
-      <div className="flex items-center gap-1">
+      <div className="mx-2 flex items-center gap-1">
         <Button
+          onClick={() => navigate(-1)}
           className={cn(
-            "bg-transparent text-profileHeader shadow-none hover:bg-transparent",
-            { "text-primaryOnly": isStyckyHeader },
+            "hover:bg-buttonOverlay h-9 w-9 rounded-full bg-transparent text-profileHeader shadow-none transition-none",
+            {
+              "hover:bg-primaryOverlay text-primaryOnly hover:text-primary":
+                isStyckyHeader,
+            },
           )}
         >
           <span className="sr-only">back</span>
-          <ArrowLeft className="!size-6" />
+          <ArrowLeft className={cn("!size-6")} />
         </Button>
-        <div className="font-bold">
+        <div className="flex-1 font-bold">
           <span className="text-sapphire">{fullName}</span>
           <div className={cn("flex gap-2 text-sm", { hidden: isStyckyHeader })}>
             <BannerStats className={headerStatsClasses} numbers={100}>

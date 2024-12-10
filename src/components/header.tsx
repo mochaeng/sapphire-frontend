@@ -34,7 +34,7 @@ function Header({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
       <nav className="h-full w-full">
         <ul className="flex h-full w-full items-center justify-between border-t-1 border-[#8a96a3]/25 bg-background px-4 py-0 md:flex-col md:justify-start md:gap-4 md:border-r-1 md:border-t-0 md:px-2 md:py-4 xl:items-start">
           <div className="flex w-full items-center justify-between gap-3 px-2 md:flex-col xl:items-start">
-            <li className="hidden md:block md:w-full">
+            <li className="md:bloc hidden md:w-full">
               <AccountMenu className="hidden md:block">
                 <AccountTriggerButton className="hover:bg-background">
                   <Avatar className="hidden size-10 items-center justify-center hover:border-2 hover:border-primaryOnly md:flex">

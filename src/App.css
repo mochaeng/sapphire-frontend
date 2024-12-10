@@ -9,14 +9,15 @@ body {
 @layer base {
   :root {
     /* my own variables */
-    /* --vh: 6.67px; */
     --header-height: 3.5rem;
     --header-with-offset: 4rem;
     /* colors */
     --primary-only: 228, 6%, 15%;
     --secondary-only: 211, 12%, 59%;
-    --secondary-only-placeholder: 211, 12%, 59%, 0.12;
+    --secondary-only-placeholder: 211, 12%, 59%, 0.5;
     --profile-header: 0, 0%, 100%;
+    --button-overlay: 0, 0%, 0%, 0.4;
+    --primary-overlay: 221.2, 83.2%, 53.3%, 0.2;
     /* ------ */
 
     --background: 0 0% 100%;
