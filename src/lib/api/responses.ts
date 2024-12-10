@@ -17,6 +17,11 @@ export const UserProfileResponseSchema = z.object({
   avatar_url: z.string().optional(),
   location: z.string().optional(),
   user_link: z.string().optional(),
+  num_following: z.number(),
+  num_followers: z.number(),
+  num_posts: z.number(),
+  num_media_posts: z.number(),
   created_at: z.string(),
   updated_at: z.string(),
 });
+export type UserProfileInfo = z.infer<typeof UserProfileResponseSchema>;

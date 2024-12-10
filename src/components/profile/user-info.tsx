@@ -1,15 +1,15 @@
 import { ExternalLink, Link, MapPin } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { UserProfileInfo } from "@/lib/types";
 import { useEffect, useRef, useState } from "react";
+import { UserProfileInfo } from "@/lib/api/responses";
 
 const profileURL = "https://i.redd.it/n6t768hnhr3e1.png";
 // const profileURL = "";
 
 function UserInfo({ profile }: { profile: UserProfileInfo }) {
-  const fullName = `${profile.firstName} ${profile.lastName || ""}`;
-  const nameAcronym = `${profile.firstName[0].toUpperCase()}${profile.lastName?.[0]?.toUpperCase() || ""}`;
+  const fullName = `${profile.first_name} ${profile.last_name || ""}`;
+  const nameAcronym = `${profile.first_name[0].toUpperCase()}${profile.last_name?.[0]?.toUpperCase() || ""}`;
 
   return (
     <div className="flex flex-col gap-2 px-4 py-4">
@@ -66,11 +66,11 @@ function UserDescription({ profile }: { profile: UserProfileInfo }) {
               {profile.location}
             </span>
           )}
-          {profile.userLink && (
+          {profile.user_link && (
             <span className="flex items-center gap-1">
               <Link size={16} />
               <a href="my.website.com" target="_blank">
-                {profile.userLink}
+                {profile.user_link}
               </a>
             </span>
           )}

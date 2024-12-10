@@ -1,15 +1,9 @@
-import {
-  ArrowLeft,
-  ExternalLink,
-  Heart,
-  Image,
-  UsersRound,
-} from "lucide-react";
+import { ArrowLeft, ExternalLink, Gem, Image, UsersRound } from "lucide-react";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import { UserProfileInfo } from "@/lib/types";
 import { useNavigate } from "react-router-dom";
+import { UserProfileInfo } from "@/lib/api/responses";
 
 function BannerStats({
   numbers,
@@ -33,7 +27,7 @@ function UserHeader({ profile }: { profile: UserProfileInfo }) {
   const [isStyckyHeader, setIsStyckyHeader] = useState(false);
   const navigate = useNavigate();
 
-  const fullName = `${profile.firstName} ${profile.lastName || ""}`;
+  const fullName = `${profile.first_name} ${profile?.last_name || ""}`;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -55,8 +49,6 @@ function UserHeader({ profile }: { profile: UserProfileInfo }) {
     };
   }, [prevScrollpos]);
 
-  const headerStatsClasses = `after:-right-3 after:opacity-90 after:content-['\\2022']`;
-
   return (
     <div
       className={cn(
@@ -67,13 +59,13 @@ function UserHeader({ profile }: { profile: UserProfileInfo }) {
         },
       )}
     >
-      <div className="mx-2 flex items-center gap-1">
+      <div className="flex items-center gap-3 p-4">
         <Button
           onClick={() => navigate(-1)}
           className={cn(
-            "hover:bg-buttonOverlay h-9 w-9 rounded-full bg-transparent text-profileHeader shadow-none transition-none",
+            "h-9 w-9 rounded-full bg-transparent text-profileHeader shadow-none transition-none hover:bg-buttonOverlay",
             {
-              "hover:bg-primaryOverlay text-primaryOnly hover:text-primary":
+              "text-primaryOnly hover:bg-primaryOverlay hover:text-primary":
                 isStyckyHeader,
             },
           )}
@@ -83,14 +75,14 @@ function UserHeader({ profile }: { profile: UserProfileInfo }) {
         </Button>
         <div className="flex-1 font-bold">
           <span className="text-sapphire">{fullName}</span>
-          <div className={cn("flex gap-2 text-sm", { hidden: isStyckyHeader })}>
-            <BannerStats className={headerStatsClasses} numbers={100}>
+          <div className={cn("flex gap-4 text-sm", { hidden: isStyckyHeader })}>
+            <BannerStats numbers={profile.num_followers}>
               <UsersRound size={18} />
             </BannerStats>
-            <BannerStats className={headerStatsClasses} numbers={100}>
-              <Heart size={18} />
+            <BannerStats numbers={profile.num_posts}>
+              <Gem size={18} />
             </BannerStats>
-            <BannerStats numbers={100}>
+            <BannerStats numbers={profile.num_media_posts}>
               <Image size={18} />
             </BannerStats>
           </div>

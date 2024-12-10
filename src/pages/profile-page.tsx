@@ -3,11 +3,13 @@ import RightSidebar from "@/components/right-sidebar";
 import { Button } from "@/components/ui/button";
 import { userProfile } from "@/lib/api/auth";
 import { DefaultError, ProfileNotFoundError } from "@/lib/api/errors";
-import { UserProfileResponseSchema } from "@/lib/api/responses";
+import {
+  UserProfileInfo,
+  UserProfileResponseSchema,
+} from "@/lib/api/responses";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ErrorPage from "./error-page";
-import { UserProfileInfo } from "@/lib/types";
 
 function ProfilePage() {
   const { username } = useParams();
@@ -33,15 +35,19 @@ function ProfilePage() {
         }
         const profile: UserProfileInfo = {
           username: parsed.data.username,
-          firstName: parsed.data.first_name,
-          lastName: parsed.data.last_name,
-          createdAt: parsed.data.created_at,
-          updatedAt: parsed.data.updated_at,
-          avatarURL: parsed.data.avatar_url,
-          bannerURL: parsed.data.banner_url,
+          first_name: parsed.data.first_name,
+          last_name: parsed.data.last_name,
+          created_at: parsed.data.created_at,
+          updated_at: parsed.data.updated_at,
+          avatar_url: parsed.data.avatar_url,
+          banner_url: parsed.data.banner_url,
           description: parsed.data.description,
           location: parsed.data.location,
-          userLink: parsed.data.user_link,
+          user_link: parsed.data.user_link,
+          num_posts: parsed.data.num_posts,
+          num_followers: parsed.data.num_followers,
+          num_following: parsed.data.num_following,
+          num_media_posts: parsed.data.num_media_posts,
         };
         setProfileData(profile);
       } catch (error) {

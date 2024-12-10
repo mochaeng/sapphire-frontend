@@ -7,7 +7,7 @@ import postImageURL2 from "@/assets/twice.jpg";
 import TextPost from "../posts/text-post";
 import ImagePost from "../posts/image-post";
 import UserHeader from "./user-header";
-import { UserProfileInfo } from "@/lib/types";
+import { UserProfileInfo } from "@/lib/api/responses";
 
 function UserProfile({ profile }: { profile: UserProfileInfo }) {
   return (
