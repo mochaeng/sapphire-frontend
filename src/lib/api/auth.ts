@@ -1,5 +1,6 @@
 import {
   ConflictError,
+  DefaultError,
   ProfileNotFoundError,
   ServerError,
   tryAgainError,
@@ -7,6 +8,7 @@ import {
   WrongEmailOrPasswordError,
 } from "./errors";
 import { SigninPayload, SignupPayload } from "./payloads";
+import { UserProfileInfo, UserProfileResponseSchema } from "./responses";
 import { API_URL } from "./utils";
 
 export async function signup(payload: SignupPayload) {
@@ -94,7 +96,10 @@ export async function authMe() {
   throw tryAgainError;
 }
 
-export async function userProfile(username: string) {
+export async function fetchUserProfile(username: string | undefined) {
+  if (!username) {
+    throw new DefaultError("username is not defined");
+  }
   const response = await fetch(`${API_URL}/v1/user/profile/${username}`, {
     headers: {
       "Content-Type": "application/json",
@@ -102,7 +107,28 @@ export async function userProfile(username: string) {
   });
   if (response.status === 201) {
     const data = await response.json();
-    return data;
+    const parsed = UserProfileResponseSchema.safeParse(data.data);
+    if (!parsed.success) {
+      console.log(parsed.error);
+      throw new DefaultError("fail parsing response");
+    }
+    const profile: UserProfileInfo = {
+      username: parsed.data.username,
+      first_name: parsed.data.first_name,
+      last_name: parsed.data.last_name,
+      created_at: parsed.data.created_at,
+      updated_at: parsed.data.updated_at,
+      avatar_url: parsed.data.avatar_url,
+      banner_url: parsed.data.banner_url,
+      description: parsed.data.description,
+      location: parsed.data.location,
+      user_link: parsed.data.user_link,
+      num_posts: parsed.data.num_posts,
+      num_followers: parsed.data.num_followers,
+      num_following: parsed.data.num_following,
+      num_media_posts: parsed.data.num_media_posts,
+    };
+    return profile;
   }
   if (response.status === 404) {
     throw new ProfileNotFoundError("Profile was not found");

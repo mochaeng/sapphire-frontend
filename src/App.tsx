@@ -7,6 +7,7 @@ import ProfilePage from "./pages/profile-page";
 import ProtectedLayout from "./pages/protected-layout";
 import AuthUserProvider from "./provider/auth/auth-user-provider";
 import { ThemeProvider } from "./provider/theme/theme-provider";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const router = createBrowserRouter([
   {
@@ -30,12 +31,16 @@ const router = createBrowserRouter([
   },
 ]);
 
+const queryClient = new QueryClient();
+
 function App() {
   return (
     <AuthUserProvider>
-      <ThemeProvider defaultTheme="light" storageKey="sapphire-ui-theme">
-        <RouterProvider router={router} />
-      </ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider defaultTheme="light" storageKey="sapphire-ui-theme">
+          <RouterProvider router={router} />
+        </ThemeProvider>
+      </QueryClientProvider>
     </AuthUserProvider>
   );
 }
