@@ -1,8 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
 import { SignupPayload } from "@/lib/api/payloads";
-import { ConflictError, DefaultError } from "@/lib/api/errors";
-import { signup } from "@/lib/api/auth";
+import { fetchSignup } from "@/lib/api/auth";
 import {
   Form,
   FormControl,
@@ -17,10 +15,20 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { signupFormSchema } from "@/lib/auth-validation";
 import AuthFormButton from "./auth-form-button";
+import { useMutation } from "@tanstack/react-query";
 
 function SignupForm() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState("");
+  const { mutate, isPending, error } = useMutation({
+    mutationFn: fetchSignup,
+    onError: (error) => {
+      if (error.message === "e-mail already taken") {
+        form.setError("email", { message: error.message });
+      }
+      if (error.message === "username already taken") {
+        form.setError("username", { message: error.message });
+      }
+    },
+  });
 
   const form = useForm<z.infer<typeof signupFormSchema>>({
     resolver: zodResolver(signupFormSchema),
@@ -33,47 +41,21 @@ function SignupForm() {
     },
   });
 
+  const onSubmit = async (values: z.infer<typeof signupFormSchema>) => {
+    const payload: SignupPayload = {
+      email: values.email,
+      first_name: values.name,
+      username: values.username,
+      password: values.password,
+    };
+    mutate(payload);
+  };
+
   const isButtonDisable =
     (form.watch("name") || "").trim().length === 0 ||
     (form.watch("username") || "").trim().length === 0 ||
     (form.watch("email") || "").trim().length === 0 ||
     (form.watch("password") || "").trim().length === 0;
-
-  const onSubmit = (values: z.infer<typeof signupFormSchema>) => {
-    setError("");
-
-    async function fetchSignup() {
-      setIsSubmitting(true);
-
-      const payload: SignupPayload = {
-        email: values.email,
-        first_name: values.name,
-        username: values.username,
-        password: values.password,
-      };
-
-      try {
-        const data = await signup(payload);
-        console.log(data);
-      } catch (err) {
-        if (err instanceof ConflictError) {
-          if (err.message === "e-mail already taken") {
-            form.setError("email", { message: err.message });
-          }
-          if (err.message === "username already taken") {
-            form.setError("username", { message: err.message });
-          }
-        }
-        if (err instanceof DefaultError) {
-          setError(err.message);
-        }
-      }
-
-      setIsSubmitting(false);
-    }
-
-    fetchSignup();
-  };
 
   return (
     <Form {...form}>
@@ -82,14 +64,13 @@ function SignupForm() {
         className="flex w-full max-w-authForm flex-col gap-4"
       >
         <FormField
-          disabled={isSubmitting}
           control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} disabled={isPending} />
               </FormControl>
               <FormDescription>This is your public name</FormDescription>
               <FormMessage />
@@ -97,54 +78,51 @@ function SignupForm() {
           )}
         />
         <FormField
-          disabled={isSubmitting}
           control={form.control}
           name="username"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} disabled={isPending} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
         <FormField
-          disabled={isSubmitting}
           control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} disabled={isPending} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
         <FormField
-          disabled={isSubmitting}
           control={form.control}
           name="password"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type="password" {...field} />
+                <Input type="password" {...field} disabled={isPending} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        {isSubmitting && (
+        {isPending && (
           <p className="text-center text-sm text-primary">Loading...</p>
         )}
-        {!isSubmitting && error && (
-          <p className="text-center text-sm text-rose-500">{error}</p>
+        {!isPending && error && (
+          <p className="text-center text-sm text-rose-500">{}</p>
         )}
-        <AuthFormButton disabled={isButtonDisable || isSubmitting}>
+        <AuthFormButton disabled={isButtonDisable || isPending}>
           SIGN UP
         </AuthFormButton>
       </form>
