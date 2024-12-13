@@ -9,17 +9,15 @@ import { useQuery } from "@tanstack/react-query";
 function ProfilePage() {
   const { username } = useParams();
 
-  const {
-    data: profileData,
-    isPending,
-    isError,
-  } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["userProfile", username],
-    queryFn: () => fetchUserProfile(username),
+    queryFn: ({ signal }) => {
+      return fetchUserProfile({ username, signal });
+    },
     retry: 1,
   });
 
-  if (isPending) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
@@ -30,7 +28,7 @@ function ProfilePage() {
   return (
     <div className="flex pb-headerWithOffset md:pb-0">
       <div className="flex w-full max-w-centerWrapper">
-        <UserProfile profile={profileData} />
+        {data ? <UserProfile profile={data} /> : null}
       </div>
 
       <RightSidebar>

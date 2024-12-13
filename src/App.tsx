@@ -35,13 +35,13 @@ const queryClient = new QueryClient();
 
 function App() {
   return (
-    <AuthUserProvider>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <AuthUserProvider>
         <ThemeProvider defaultTheme="light" storageKey="sapphire-ui-theme">
           <RouterProvider router={router} />
         </ThemeProvider>
-      </QueryClientProvider>
-    </AuthUserProvider>
+      </AuthUserProvider>
+    </QueryClientProvider>
   );
 }
 

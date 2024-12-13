@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { AuthUserContext, AuthUser } from "./user-context";
-import { authMe } from "@/lib/api/auth";
-import { DefaultError, ServerError, UnauthorizedError } from "@/lib/api/errors";
-import { AuthMeResponseSchema } from "@/lib/api/responses";
+import { fetchAuthMe } from "@/lib/api/auth";
+import { ServerError, UnauthorizedError } from "@/lib/api/errors";
+import { useMutation } from "@tanstack/react-query";
 
 export default function AuthUserProvider({
   children,
@@ -10,41 +10,21 @@ export default function AuthUserProvider({
   children: React.ReactNode;
 }) {
   const [user, setUser] = useState({} as AuthUser);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    async function getAuthUserInfo() {
-      try {
-        const response = await authMe();
-        const parsed = AuthMeResponseSchema.safeParse(response.data);
-        if (!parsed.success) {
-          throw new DefaultError("fail parsing");
-        }
-        const user: AuthUser = {
-          email: parsed.data.email,
-          firstName: parsed.data.first_name,
-          lastName: parsed.data.last_name || "",
-          username: parsed.data.username,
-          roleName: parsed.data.role_name,
-          isAuthenticated: true,
-        };
-        setUser(user);
-      } catch (error) {
-        if (
-          error instanceof UnauthorizedError ||
-          error instanceof ServerError
-        ) {
-          setUser((u) => ({ ...u, isAuthenticated: false }));
-        }
-      } finally {
-        setIsLoading(false);
+  const { mutate, isPending } = useMutation({
+    mutationFn: fetchAuthMe,
+    onSuccess: (authUser) => {
+      setUser(authUser);
+    },
+    onError: (error) => {
+      if (error instanceof UnauthorizedError || error instanceof ServerError) {
+        setUser((u) => ({ ...u, isAuthenticated: false }));
       }
-    }
+    },
+  });
 
-    getAuthUserInfo();
-  }, []);
+  useEffect(() => mutate(), [mutate]);
 
-  if (isLoading) {
+  if (isPending) {
     return <div>Loading...</div>;
   }
 

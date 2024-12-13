@@ -1,3 +1,4 @@
+import { AuthUser } from "@/provider/auth/user-context";
 import {
   ConflictError,
   DefaultError,
@@ -8,10 +9,14 @@ import {
   WrongEmailOrPasswordError,
 } from "./errors";
 import { SigninPayload, SignupPayload } from "./payloads";
-import { UserProfileInfo, UserProfileResponseSchema } from "./responses";
+import {
+  AuthMeResponseSchema,
+  UserProfileInfo,
+  UserProfileResponseSchema,
+} from "./responses";
 import { API_URL } from "./utils";
 
-export async function signup(payload: SignupPayload) {
+export async function fetchSignup(payload: SignupPayload) {
   const response = await fetch(`${API_URL}/v1/auth/signup`, {
     method: "POST",
     headers: {
@@ -32,7 +37,7 @@ export async function signup(payload: SignupPayload) {
   throw tryAgainError;
 }
 
-export async function signin(payload: SigninPayload) {
+export async function fetchSignin(payload: SigninPayload) {
   const response = await fetch(`${API_URL}/v1/auth/signin`, {
     method: "POST",
     headers: {
@@ -74,7 +79,7 @@ export async function authStatus() {
   return response.status === 204;
 }
 
-export async function authMe() {
+export async function fetchAuthMe() {
   console.log("calling authMe");
   const response = await fetch(`${API_URL}/v1/auth/me`, {
     method: "POST",
@@ -85,7 +90,19 @@ export async function authMe() {
   });
   if (response.status === 200) {
     const data = await response.json();
-    return data;
+    const parsed = AuthMeResponseSchema.safeParse(data.data);
+    if (!parsed.success) {
+      throw new DefaultError("fail parsing");
+    }
+    const user: AuthUser = {
+      email: parsed.data.email,
+      firstName: parsed.data.first_name,
+      lastName: parsed.data.last_name || "",
+      username: parsed.data.username,
+      roleName: parsed.data.role_name,
+      isAuthenticated: true,
+    };
+    return user;
   }
   if (response.status === 401) {
     throw new UnauthorizedError();
@@ -96,7 +113,13 @@ export async function authMe() {
   throw tryAgainError;
 }
 
-export async function fetchUserProfile(username: string | undefined) {
+export async function fetchUserProfile({
+  username,
+  signal,
+}: {
+  username: string | undefined;
+  signal: AbortSignal;
+}) {
   if (!username) {
     throw new DefaultError("username is not defined");
   }
@@ -104,6 +127,7 @@ export async function fetchUserProfile(username: string | undefined) {
     headers: {
       "Content-Type": "application/json",
     },
+    signal,
   });
   if (response.status === 201) {
     const data = await response.json();
