@@ -4,7 +4,7 @@ export type AuthUser = {
   email: string;
   username: string;
   firstName: string;
-  lastName: string;
+  lastName?: string;
   roleName: string;
   isAuthenticated: boolean;
 };

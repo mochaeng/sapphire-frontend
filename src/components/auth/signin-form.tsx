@@ -37,7 +37,7 @@ function SigninForm() {
   const authMeMutation = useMutation({
     mutationFn: fetchAuthMe,
     onSuccess: (user) => {
-      setUser(user);
+      setUser({ ...user, isAuthenticated: true });
     },
     onError: (error) => {
       console.log("error here?", error);

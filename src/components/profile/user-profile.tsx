@@ -2,7 +2,6 @@ import { Separator } from "@/components/ui/separator";
 import UserBanner from "./user-banner";
 import UserInfo from "./user-info";
 import ContentPost from "../posts/content-post";
-import postImageURL from "@/assets/chaeyoung.jpg";
 import postImageURL2 from "@/assets/twice.jpg";
 import TextPost from "../posts/text-post";
 import ImagePost from "../posts/image-post";
@@ -17,13 +16,13 @@ function UserProfile({ profile }: { profile: UserProfileInfo }) {
       <UserInfo profile={profile} />
       <Separator className="h-2 border-y-1 border-black bg-secondaryOnly opacity-25" />
 
-      {/* <ContentPost>
+      <ContentPost>
         <TextPost>
           This is going to be so special week with Thanksgiving and black friday
           coming up 😊🚀✨
         </TextPost>
-        <ImagePost src={postImageURL} alt="chaeyoung from twice kpop group" />
-      </ContentPost> */}
+        <ImagePost src={postImageURL2} alt="chaeyoung from twice kpop group" />
+      </ContentPost>
 
       <ContentPost>
         <TextPost>

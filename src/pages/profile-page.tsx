@@ -1,10 +1,10 @@
 import UserProfile from "@/components/profile/user-profile";
 import RightSidebar from "@/components/right-sidebar";
 import { Button } from "@/components/ui/button";
-import { fetchUserProfile } from "@/lib/api/auth";
 import { useParams } from "react-router-dom";
 import ErrorPage from "./error-page";
 import { useQuery } from "@tanstack/react-query";
+import { fetchUserProfile } from "@/lib/api/user";
 
 function ProfilePage() {
   const { username } = useParams();

@@ -80,7 +80,7 @@ function AccountMenu({
                 {user.isAuthenticated ? (
                   <>
                     <AvatarImage
-                      src="https://github.com/naesamo.png"
+                      src="https://github.com/mochaeng.png"
                       className="object-contain"
                     />
                     <AvatarFallback className="bg-secondaryOnlyPlaceholder text-lg text-primary">
