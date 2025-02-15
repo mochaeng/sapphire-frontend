@@ -4,8 +4,8 @@ ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 
 FROM base AS builder
-ARG VITE_API_URL
-ENV VITE_API_URL=${VITE_API_URL}
+# ARG VITE_API_URL
+ENV VITE_API_URL="__RUNTIME_API_URL__"
 COPY . /app
 WORKDIR /app
 
@@ -22,5 +22,10 @@ RUN rm -rf ./*
 COPY --from=builder /app/dist .
 COPY .nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
+# replacing api url at runtime
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
 EXPOSE 80
+ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
