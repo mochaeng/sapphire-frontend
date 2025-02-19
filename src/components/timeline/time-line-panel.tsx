@@ -1,6 +1,6 @@
 function TimeLinePanel() {
   return (
-    <div></div>
+    <div className="bg-rose-200">hi</div>
     // <div className="flex w-full max-w-screen-xl justify-center">
     //   <Header />
     //   <div className="flex w-full max-w-[1016px]">

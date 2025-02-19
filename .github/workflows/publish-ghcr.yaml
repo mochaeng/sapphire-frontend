@@ -1,5 +1,4 @@
 name: Deploy Image to GHCR
-
 on:
   push:
     branches:
@@ -26,5 +25,5 @@ jobs:
 
       - name: Build and push image
         run: |
-          docker build . --build-arg VITE_API_URL=${{ secrets.VITE_API_URL }} --tag ghcr.io/${{ github.repository }}:latest
+          docker build . --tag ghcr.io/${{ github.repository }}:latest
           docker push ghcr.io/${{ github.repository }}:latest
