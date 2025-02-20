@@ -73,7 +73,7 @@ function UserHeader({ profile }: { profile: UserProfileInfo }) {
           <span className="sr-only">back</span>
           <ArrowLeft className={cn("!size-6")} />
         </Button>
-        <div className="flex-1 font-bold">
+        <div className="flex-1 font-medium">
           <span className="text-sapphire">{fullName}</span>
           <div className={cn("flex gap-4 text-sm", { hidden: isStyckyHeader })}>
             <BannerStats numbers={profile.num_followers}>

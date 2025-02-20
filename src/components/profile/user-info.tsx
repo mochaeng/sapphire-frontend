@@ -20,7 +20,7 @@ function UserInfo({ profile }: { profile: UserProfileInfo }) {
         </Button>
       </div>
       <div className="flex flex-col">
-        <span className="text-sapphire font-bold text-primaryOnly">
+        <span className="text-sapphire font-medium text-primaryOnly">
           {fullName}
         </span>
         <span className="text-sm text-secondaryOnly">@{profile.username}</span>

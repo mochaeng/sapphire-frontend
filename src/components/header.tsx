@@ -17,7 +17,7 @@ import { buttonClasses, cn, focusVisibleClasses } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { useAuthUser } from "@/hooks/use-auth-user";
 
-const iconSize = 33;
+const iconSize = 28;
 
 function Header({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   const { user } = useAuthUser();
@@ -87,7 +87,7 @@ function Header({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
             <li className="hidden md:block md:w-full">
               <AccountMenu>
                 <AccountTriggerButton>
-                  <CircleEllipsis className="!h-[33px] !w-[33px]" />
+                  <CircleEllipsis className="!h-[28px] !w-[28px]" />
                   <span className="hidden text-[19px] xl:block">More</span>
                 </AccountTriggerButton>
               </AccountMenu>
@@ -159,7 +159,7 @@ function IconButton({
             className,
             // focusClasses,
             focusVisibleClasses,
-            { "text-primaryOnly": isActive },
+            { "font-medium text-primaryOnly": isActive },
           )
         }
         end
@@ -182,7 +182,7 @@ function NewPostButton() {
     >
       <div className="relative flex items-center justify-center gap-4 text-center xl:w-full xl:justify-start">
         <Plus size={24} />
-        <span className="hidden font-semibold xl:absolute xl:left-0 xl:right-0 xl:flex xl:w-full xl:justify-center xl:text-sm xl:text-white">
+        <span className="hidden font-medium xl:absolute xl:left-0 xl:right-0 xl:flex xl:w-full xl:justify-center xl:text-sm xl:text-white">
           NEW POST
         </span>
       </div>

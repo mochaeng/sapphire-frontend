@@ -5,14 +5,14 @@ const profileURL = "https://i.redd.it/n6t768hnhr3e1.png";
 
 function HeaderPost() {
   return (
-    <div className="flex gap-2 px-4">
+    <div className="flex gap-2 px-4 text-primaryOnly">
       <Avatar className="size-12 border-2 border-background">
         <AvatarImage src={profileURL} className="object-cover" />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
       <div className="flex w-full flex-col">
         <div className="flex w-full items-center justify-between">
-          <span className="font-bold">Jurídico Chaeyoung</span>
+          <span className="font-medium">Jurídico Chaeyoung</span>
           <div className="flex items-center gap-2">
             <span className="text-secondaryOnly">Yesterday</span>
             <button>

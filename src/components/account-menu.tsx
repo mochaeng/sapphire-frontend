@@ -42,10 +42,10 @@ function AccountMenu({
 
   const side = isMobile ? "right" : "top";
   let iconTheme = <Moon />;
-  let iconText = "Dark Mode";
+  let iconText = "Light Mode";
   if (theme === "light") {
     iconTheme = <Sun />;
-    iconText = "Light Mode";
+    iconText = "Dark Mode";
   }
 
   const toggleTheme = () => {
