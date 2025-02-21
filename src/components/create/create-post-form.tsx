@@ -12,16 +12,17 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
-import { useState } from "react";
+import { useEffect, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { PostCreatePayload } from "@/lib/api/payloads";
 import { fetchCreatePost } from "@/lib/api/posts";
 import { Button } from "../ui/button";
+import { useLocation } from "react-router-dom";
+import { AutoResizeTextarea } from "../autoresize-textarea";
 
-function CreatePostForm() {
-  const [showMediaInput, setShowMediaInput] = useState(false);
-  const [showTagsInput, setShowTagsInput] = useState(false);
+function CreatePostForm({ ...props }: React.HTMLAttributes<HTMLFormElement>) {
+  const location = useLocation();
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const { mutate, isPending } = useMutation({
     mutationFn: fetchCreatePost,
@@ -29,16 +30,6 @@ function CreatePostForm() {
       console.log(error);
     },
   });
-
-  const onSubmit = async (values: z.infer<typeof createPostFormSchema>) => {
-    console.log("hello");
-    const payload: PostCreatePayload = {
-      content: values.content,
-      media: values.media,
-      tags: values.tags,
-    };
-    mutate(payload);
-  };
 
   const form = useForm<z.infer<typeof createPostFormSchema>>({
     resolver: zodResolver(createPostFormSchema),
@@ -50,91 +41,90 @@ function CreatePostForm() {
     },
   });
 
+  const onSubmit = async (values: z.infer<typeof createPostFormSchema>) => {
+    const payload: PostCreatePayload = {
+      content: values.content,
+      media: values.media,
+      tags: values.tags,
+    };
+    mutate(payload);
+  };
+
+  useEffect(() => {
+    if (location.state?.autofocus && textAreaRef.current) {
+      textAreaRef.current.focus();
+    }
+  });
+
   return (
     <Form {...form}>
       <form
+        className=""
         encType="multipart/form-data"
         onSubmit={form.handleSubmit(onSubmit)}
+        {...props}
       >
         <FormField
           control={form.control}
           name="content"
           render={({ field }) => (
             <FormItem>
-              {/* <FormLabel>Title</FormLabel> */}
               <FormControl>
-                <Textarea {...field} placeholder="Write your post..." />
+                <AutoResizeTextarea
+                  {...field}
+                  ref={textAreaRef}
+                  className="rounded-none px-4"
+                  placeholder="Compose"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        {/* Buttons to toggle additional fields */}
-        <div className="flex space-x-2">
-          <button
-            type="button"
-            onClick={() => setShowMediaInput((prev) => !prev)}
-            className="rounded border px-3 py-1"
-          >
-            {showMediaInput ? "Cancel Image" : "Add Image"}
-          </button>
-          <button
-            type="button"
-            onClick={() => setShowTagsInput((prev) => !prev)}
-            className="rounded border px-3 py-1"
-          >
-            {showTagsInput ? "Cancel Tags" : "Add Tags"}
-          </button>
-        </div>
+        <FormField
+          control={form.control}
+          name="media"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Media</FormLabel>
+              <FormControl>
+                <Input
+                  type="file"
+                  onChange={(e) => field.onChange(e.target.files)}
+                  accept="image/*"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-        {showMediaInput && (
-          <FormField
-            control={form.control}
-            name="media"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Media</FormLabel>
-                <FormControl>
-                  <Input
-                    type="file"
-                    onChange={(e) => field.onChange(e.target.files)}
-                    accept="image/*"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        )}
-
-        {showTagsInput && (
-          <FormField
-            control={form.control}
-            name="tags"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Tags</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter tags separated by commas"
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      const tagsArray = value
-                        .split(",")
-                        .map((t) => t.trim())
-                        .filter((t) => t.length > 0);
-                      field.onChange(tagsArray);
-                    }}
-                  />
-                </FormControl>
-                <FormDescription>
-                  Separate tags with commas (e.g., react, javascript)
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        )}
+        <FormField
+          control={form.control}
+          name="tags"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Tags</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Enter tags separated by commas"
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    const tagsArray = value
+                      .split(",")
+                      .map((t) => t.trim())
+                      .filter((t) => t.length > 0);
+                    field.onChange(tagsArray);
+                  }}
+                />
+              </FormControl>
+              <FormDescription>
+                Separate tags with commas (e.g., react, javascript)
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <Button type="submit" disabled={isPending} className="btn btn-primary">
           {isPending ? "Submitting..." : "Post"}

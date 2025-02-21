@@ -5,12 +5,31 @@ import RightSidebar from "../right-sidebar";
 import { Button } from "../ui/button";
 import postImageURL2 from "@/assets/twice.jpg";
 import TimelineHeader from "./timeline-header";
+import { useNavigate } from "react-router-dom";
+import CreatePostForm from "../create/create-post-form";
 
 function TimelinePanel() {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate("/posts/create", { state: { autofocus: true } });
+  };
+
   return (
     <div className="flex">
       <div className="flex w-full max-w-centerWrapper flex-col">
         <TimelineHeader />
+
+        <CreatePostForm onClick={handleClick} />
+
+        {/* <div onClick={handleClick} className="cursor-pointer">
+          <Textarea
+            placeholder="What's happening?"
+            readOnly
+            className="bg-gray-100"
+          />
+        </div> */}
+
         {Array.from({ length: 3 }).map((_, i) => (
           <ContentPost key={i}>
             <TextPost>
