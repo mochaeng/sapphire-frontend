@@ -1,4 +1,4 @@
-import CreatePanel from "@/components/create/create-panel";
+import CreatePanel from "@/components/create/create-post-panel";
 import RightSidebar from "@/components/right-sidebar";
 import { Button } from "@/components/ui/button";
 import { useAuthUser } from "@/hooks/use-auth-user";
