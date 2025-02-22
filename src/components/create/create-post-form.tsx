@@ -5,24 +5,39 @@ import { z } from "zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "../ui/form";
-import { Input } from "../ui/input";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { PostCreatePayload } from "@/lib/api/payloads";
 import { fetchCreatePost } from "@/lib/api/posts";
-import { Button } from "../ui/button";
 import { useLocation } from "react-router-dom";
 import { AutoResizeTextarea } from "../autoresize-textarea";
+import { Film, Image } from "lucide-react";
+import AddMediaButton from "./add-media-button";
 
 function CreatePostForm({ ...props }: React.HTMLAttributes<HTMLFormElement>) {
   const location = useLocation();
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const [files, setFiles] = useState<File[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleAddFile = (type: "image" | "video") => {
+    if (files.length < 4 && fileInputRef.current) {
+      fileInputRef.current.accept = type === "video" ? "video/*" : "image/*";
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newFile = e.target.files?.[0];
+    if (newFile) {
+      setFiles((prevFiles) => [...prevFiles, newFile]);
+    }
+    e.target.value = "";
+  };
 
   const { mutate, isPending } = useMutation({
     mutationFn: fetchCreatePost,
@@ -59,7 +74,7 @@ function CreatePostForm({ ...props }: React.HTMLAttributes<HTMLFormElement>) {
   return (
     <Form {...form}>
       <form
-        className=""
+        className="border-b-1 border-[#8a96a3]/25"
         encType="multipart/form-data"
         onSubmit={form.handleSubmit(onSubmit)}
         {...props}
@@ -73,25 +88,8 @@ function CreatePostForm({ ...props }: React.HTMLAttributes<HTMLFormElement>) {
                 <AutoResizeTextarea
                   {...field}
                   ref={textAreaRef}
-                  className="rounded-none px-4"
-                  placeholder="Compose"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="media"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Media</FormLabel>
-              <FormControl>
-                <Input
-                  type="file"
-                  onChange={(e) => field.onChange(e.target.files)}
-                  accept="image/*"
+                  className="!text-mid scrollbar overflow-y-auto rounded-none border-none p-4 shadow-none transition duration-200 placeholder:transition-all focus:!outline-none focus:!ring-0 focus:!ring-offset-0 focus:placeholder:opacity-40"
+                  placeholder="Compose new post..."
                 />
               </FormControl>
               <FormMessage />
@@ -99,36 +97,47 @@ function CreatePostForm({ ...props }: React.HTMLAttributes<HTMLFormElement>) {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="tags"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Tags</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter tags separated by commas"
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    const tagsArray = value
-                      .split(",")
-                      .map((t) => t.trim())
-                      .filter((t) => t.length > 0);
-                    field.onChange(tagsArray);
-                  }}
+        <div className="flex gap-2 px-4">
+          {files.map((file, index) => (
+            <div key={index} className="relative">
+              {file.type.startsWith("image/") ? (
+                <img
+                  src={URL.createObjectURL(file)}
+                  alt={`upload-${index}`}
+                  className="h-16 w-16 rounded object-cover"
                 />
-              </FormControl>
-              <FormDescription>
-                Separate tags with commas (e.g., react, javascript)
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+              ) : (
+                <video
+                  src={URL.createObjectURL(file)}
+                  className="h-16 w-16 rounded object-cover"
+                  controls
+                />
+              )}
+            </div>
+          ))}
+        </div>
 
-        <Button type="submit" disabled={isPending} className="btn btn-primary">
+        <div className="flex items-center gap-2 px-4 py-1 text-secondaryOnly">
+          <AddMediaButton onClick={() => handleAddFile("image")}>
+            <Image
+              size={22}
+              className="hover:bg-secondary hover:text-primary"
+            />
+          </AddMediaButton>
+          <AddMediaButton onClick={() => handleAddFile("video")}>
+            <Film size={22} className="hover:bg-secondary hover:text-primary" />
+          </AddMediaButton>
+          <input
+            type="file"
+            ref={fileInputRef}
+            className="hidden"
+            onChange={handleFileChange}
+          />
+        </div>
+
+        {/* <Button type="submit" disabled={isPending} className="btn btn-primary">
           {isPending ? "Submitting..." : "Post"}
-        </Button>
+        </Button> */}
       </form>
     </Form>
   );

@@ -90,6 +90,7 @@ export default {
       },
       fontSize: {
         fontPrimary: "19px",
+        mid: ["16px", "20px"],
         sapphire: ["19px", "24px"],
       },
       padding: {

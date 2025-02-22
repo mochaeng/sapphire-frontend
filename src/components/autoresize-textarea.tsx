@@ -19,7 +19,8 @@ const AutoResizeTextarea = React.forwardRef<
     const textarea = textareaRef.current;
     if (textarea) {
       textarea.style.height = "auto";
-      textarea.style.height = `${textarea.scrollHeight}px`;
+      const newHeight = Math.min(textarea.scrollHeight, 300); // 300px max
+      textarea.style.height = `${newHeight}px`;
     }
   };
 
