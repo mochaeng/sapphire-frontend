@@ -2,6 +2,7 @@ import { PostCreatePayload } from "./payloads";
 import { API_URL } from "./utils";
 
 export async function fetchCreatePost(payload: PostCreatePayload) {
+  console.log(payload);
   const formData = new FormData();
   formData.append("content", payload.content);
 

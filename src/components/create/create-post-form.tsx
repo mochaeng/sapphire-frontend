@@ -1,6 +1,5 @@
 import { createPostFormSchema } from "@/lib/posts-validation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import {
   Form,
@@ -10,15 +9,17 @@ import {
   FormMessage,
 } from "../ui/form";
 import { useEffect, useRef, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { PostCreatePayload } from "@/lib/api/payloads";
-import { fetchCreatePost } from "@/lib/api/posts";
 import { useLocation } from "react-router-dom";
 import { AutoResizeTextarea } from "../autoresize-textarea";
 import { Film, Image } from "lucide-react";
 import AddMediaButton from "./add-media-button";
 
-function CreatePostForm({ ...props }: React.HTMLAttributes<HTMLFormElement>) {
+function CreatePostForm({
+  form,
+  ...props
+}: {
+  form: UseFormReturn<z.infer<typeof createPostFormSchema>>;
+} & React.HTMLAttributes<HTMLFormElement>) {
   const location = useLocation();
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [files, setFiles] = useState<File[]>([]);
@@ -32,37 +33,15 @@ function CreatePostForm({ ...props }: React.HTMLAttributes<HTMLFormElement>) {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+
     const newFile = e.target.files?.[0];
     if (newFile) {
-      setFiles((prevFiles) => [...prevFiles, newFile]);
+      const newFiles = [...files, newFile];
+      setFiles(newFiles);
+      form?.setValue("media", newFiles);
     }
     e.target.value = "";
-  };
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: fetchCreatePost,
-    onError: (error) => {
-      console.log(error);
-    },
-  });
-
-  const form = useForm<z.infer<typeof createPostFormSchema>>({
-    resolver: zodResolver(createPostFormSchema),
-    mode: "onBlur",
-    defaultValues: {
-      content: "",
-      media: null,
-      tags: [],
-    },
-  });
-
-  const onSubmit = async (values: z.infer<typeof createPostFormSchema>) => {
-    const payload: PostCreatePayload = {
-      content: values.content,
-      media: values.media,
-      tags: values.tags,
-    };
-    mutate(payload);
   };
 
   useEffect(() => {
@@ -76,11 +55,11 @@ function CreatePostForm({ ...props }: React.HTMLAttributes<HTMLFormElement>) {
       <form
         className="border-b-1 border-[#8a96a3]/25"
         encType="multipart/form-data"
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={(e) => e.preventDefault()}
         {...props}
       >
         <FormField
-          control={form.control}
+          control={form?.control}
           name="content"
           render={({ field }) => (
             <FormItem>
@@ -88,7 +67,7 @@ function CreatePostForm({ ...props }: React.HTMLAttributes<HTMLFormElement>) {
                 <AutoResizeTextarea
                   {...field}
                   ref={textAreaRef}
-                  className="!text-mid scrollbar overflow-y-auto rounded-none border-none p-4 shadow-none transition duration-200 placeholder:transition-all focus:!outline-none focus:!ring-0 focus:!ring-offset-0 focus:placeholder:opacity-40"
+                  className="scrollbar overflow-y-auto rounded-none border-none p-4 !text-mid shadow-none transition duration-200 placeholder:transition-all focus:!outline-none focus:!ring-0 focus:!ring-offset-0 focus:placeholder:opacity-40"
                   placeholder="Compose new post..."
                 />
               </FormControl>
@@ -134,10 +113,6 @@ function CreatePostForm({ ...props }: React.HTMLAttributes<HTMLFormElement>) {
             onChange={handleFileChange}
           />
         </div>
-
-        {/* <Button type="submit" disabled={isPending} className="btn btn-primary">
-          {isPending ? "Submitting..." : "Post"}
-        </Button> */}
       </form>
     </Form>
   );

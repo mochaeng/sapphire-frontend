@@ -6,7 +6,7 @@ import { ArrowLeft } from "lucide-react";
 function BackButton({
   className,
   ...rest
-}: { isStyckyHeader: boolean } & React.HTMLAttributes<HTMLButtonElement>) {
+}: React.HTMLAttributes<HTMLButtonElement>) {
   const navigate = useNavigate();
 
   return (

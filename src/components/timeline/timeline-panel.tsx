@@ -7,9 +7,23 @@ import postImageURL2 from "@/assets/twice.jpg";
 import TimelineHeader from "./timeline-header";
 import { useNavigate } from "react-router-dom";
 import CreatePostForm from "../create/create-post-form";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { createPostFormSchema } from "@/lib/posts-validation";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 function TimelinePanel() {
   const navigate = useNavigate();
+
+  const form = useForm<z.infer<typeof createPostFormSchema>>({
+    resolver: zodResolver(createPostFormSchema),
+    mode: "onBlur",
+    defaultValues: {
+      content: "",
+      media: null,
+      tags: [],
+    },
+  });
 
   const handleClick = () => {
     navigate("/posts/create", { state: { autofocus: true } });
@@ -20,15 +34,7 @@ function TimelinePanel() {
       <div className="flex w-full max-w-centerWrapper flex-col">
         <TimelineHeader />
 
-        <CreatePostForm onClick={handleClick} />
-
-        {/* <div onClick={handleClick} className="cursor-pointer">
-          <Textarea
-            placeholder="What's happening?"
-            readOnly
-            className="bg-gray-100"
-          />
-        </div> */}
+        <CreatePostForm form={form} onClick={handleClick} />
 
         {Array.from({ length: 3 }).map((_, i) => (
           <ContentPost key={i}>
