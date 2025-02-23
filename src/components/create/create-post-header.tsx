@@ -29,7 +29,7 @@ function CreateHeader({
 
       <button
         type="submit"
-        disabled={!hasContent}
+        disabled={!isDisable}
         className={cn(
           "rounded-full bg-secondaryOnly px-4 py-2 text-small font-medium opacity-30",
           { "bg-primary opacity-100": hasContent },
