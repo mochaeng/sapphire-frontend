@@ -24,12 +24,16 @@ export default function AuthUserProvider({
 
   useEffect(() => mutate(), [mutate]);
 
+  const logout = () => {
+    setUser((u) => ({ ...u, isAuthenticated: false }));
+  };
+
   if (isPending) {
     return <div>Loading...</div>;
   }
 
   return (
-    <AuthUserContext.Provider value={{ user, setUser }}>
+    <AuthUserContext.Provider value={{ user, setUser, logout }}>
       {children}
     </AuthUserContext.Provider>
   );

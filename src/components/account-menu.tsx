@@ -23,6 +23,8 @@ import { cn } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
 import { useTheme } from "@/hooks/use-theme";
 import { useAuthUser } from "@/hooks/use-auth-user";
+import { useMutation } from "@tanstack/react-query";
+import { fetchAuthSignout } from "@/lib/api/auth";
 
 function AccountMenu({
   children,
@@ -31,9 +33,19 @@ function AccountMenu({
   children: React.ReactNode;
 } & React.HTMLAttributes<HTMLDivElement>) {
   const { theme, setTheme } = useTheme();
-  const { user } = useAuthUser();
+  const { user, logout } = useAuthUser();
   const [portalContainer, setPortalContainer] = useState<Element | null>(null);
   const isMobile = useMediaQuery("(max-width: 499px)");
+
+  const { mutate } = useMutation({
+    mutationFn: fetchAuthSignout,
+    onSuccess: () => {
+      logout();
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
 
   useEffect(() => {
     const portal = isMobile ? document.body : document.getElementById("header");
@@ -53,6 +65,12 @@ function AccountMenu({
       setTheme("dark");
     } else {
       setTheme("light");
+    }
+  };
+
+  const signoutHandle = () => {
+    if (user.isAuthenticated) {
+      mutate();
     }
   };
 
@@ -133,10 +151,17 @@ function AccountMenu({
             </div>
             <Separator className={separatorClasses} />
             <div className="px-2">
-              <SheetButton as="button">
-                <LogOut />
-                <span>{user.isAuthenticated ? "Logout" : "Login"}</span>
-              </SheetButton>
+              {user.isAuthenticated ? (
+                <SheetButton as="button" onSignout={signoutHandle}>
+                  <LogOut />
+                  <span>Logout</span>
+                </SheetButton>
+              ) : (
+                <SheetButton as="a" href="/">
+                  <User />
+                  <span>Login</span>
+                </SheetButton>
+              )}
             </div>
           </div>
         </SheetContent>
@@ -149,10 +174,12 @@ function SheetButton({
   as = "a",
   href,
   children,
+  onSignout,
 }: {
   as: "a" | "button";
   href?: string;
   children: React.ReactNode;
+  onSignout?: () => void;
 }) {
   const classes =
     "flex items-center gap-2 rounded-full p-2 hover:bg-secondary hover:text-primary w-full";
@@ -160,7 +187,7 @@ function SheetButton({
   if (as === "a") {
     return (
       <SheetClose asChild>
-        <Link to={href as string} className={classes}>
+        <Link to={href ? "/" : ""} className={classes}>
           {children}
         </Link>
       </SheetClose>
@@ -168,7 +195,9 @@ function SheetButton({
   }
   return (
     <SheetClose asChild>
-      <button className={cn("hover:text-primary", classes)}>{children}</button>
+      <button onClick={onSignout} className={cn("hover:text-primary", classes)}>
+        {children}
+      </button>
     </SheetClose>
   );
 }

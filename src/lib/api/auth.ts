@@ -107,3 +107,15 @@ export async function fetchAuthMe() {
   }
   throw tryAgainError;
 }
+
+export async function fetchAuthSignout() {
+  const response = await fetch(`${API_URL}/v1/auth/signout`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+  console.log(response);
+  return response.status === 204;
+}

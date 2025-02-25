@@ -12,11 +12,13 @@ export type AuthUser = {
 export type AuthUserState = {
   user: AuthUser;
   setUser: (user: AuthUser) => void;
+  logout: () => void;
 };
 
 const initialState: AuthUserState = {
   user: {} as AuthUser,
   setUser: () => null,
+  logout: () => null,
 };
 
 export const AuthUserContext = createContext<AuthUserState>(initialState);
