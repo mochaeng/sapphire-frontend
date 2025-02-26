@@ -3,9 +3,11 @@ import SigninForm from "./signin-form";
 import SignupForm from "./signup-form";
 import { Button } from "../ui/button";
 import { useState } from "react";
+import AccountConfirmationDialog from "./account-confirmation-dialog";
 
 function AuthPanel() {
   const [isLogin, setIsLogin] = useState(true);
+  const [alertOpen, setAlertOpen] = useState(false);
 
   let title = "Log in";
   if (!isLogin) {
@@ -34,13 +36,22 @@ function AuthPanel() {
           <div className="w-full max-w-authForm">
             <p className="mb-1 font-medium">{title}</p>
           </div>
-          {isLogin ? <SigninForm /> : <SignupForm />}
+          {isLogin ? (
+            <SigninForm />
+          ) : (
+            <SignupForm
+              onOpenLogin={handleOpenLogin}
+              setAlertOpen={setAlertOpen}
+            />
+          )}
           <AuxPanel
             onOpenLogin={handleOpenLogin}
             onOpenSignup={handleOpenSignup}
             isLogin={isLogin}
           />
         </section>
+
+        <AccountConfirmationDialog open={alertOpen} setOpen={setAlertOpen} />
       </div>
     </div>
   );
