@@ -21,7 +21,7 @@ function AuthPanel() {
   };
 
   return (
-    <div className="relative flex w-full items-center justify-center pt-5 lg-1:pb-16 lg-1:pt-16">
+    <div className="relative flex h-screen w-full items-center justify-center pt-5 lg-1:pb-16 lg-1:pt-16">
       <div className="grid w-full max-w-[1080px] grid-cols-1 gap-6 lg-1:grid-cols-2">
         <HalfColorScreen className="hidden bg-primary lg-1:block" />
         <section className="flex justify-center">
@@ -32,7 +32,7 @@ function AuthPanel() {
         </section>
         <section className="flex flex-col items-center justify-center gap-2">
           <div className="w-full max-w-authForm">
-            <p className="mb-1 font-semibold">{title}</p>
+            <p className="mb-1 font-medium">{title}</p>
           </div>
           {isLogin ? <SigninForm /> : <SignupForm />}
           <AuxPanel

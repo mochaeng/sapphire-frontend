@@ -32,7 +32,8 @@ function SignupForm() {
 
   const form = useForm<z.infer<typeof signupFormSchema>>({
     resolver: zodResolver(signupFormSchema),
-    mode: "onBlur",
+    mode: "onSubmit",
+    reValidateMode: "onBlur",
     defaultValues: {
       name: "",
       username: "",
