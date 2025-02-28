@@ -4,6 +4,8 @@ import SignupForm from "./signup-form";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import AccountConfirmationDialog from "./account-confirmation-dialog";
+import { FcGoogle } from "react-icons/fc";
+import { API_URL } from "@/lib/api/utils";
 
 function AuthPanel() {
   const [isLogin, setIsLogin] = useState(true);
@@ -20,6 +22,10 @@ function AuthPanel() {
 
   const handleOpenLogin = () => {
     setIsLogin(true);
+  };
+
+  const handleGoogleSignIn = () => {
+    window.location.href = `${API_URL}/v1/auth/google/login`;
   };
 
   return (
@@ -44,11 +50,27 @@ function AuthPanel() {
               setAlertOpen={setAlertOpen}
             />
           )}
-          <AuxPanel
-            onOpenLogin={handleOpenLogin}
-            onOpenSignup={handleOpenSignup}
-            isLogin={isLogin}
-          />
+
+          <div className="p-4">
+            <AuxPanel
+              onOpenLogin={handleOpenLogin}
+              onOpenSignup={handleOpenSignup}
+              isLogin={isLogin}
+            />
+          </div>
+
+          <div className="w-full max-w-authForm">
+            <a
+              // onClick={handleGoogleSignIn}
+              href={`${API_URL}/v1/auth/google/login`}
+              className="flex h-11 w-full cursor-pointer items-center justify-start rounded-full border-2 border-primary bg-primary text-center text-small font-medium text-white shadow hover:bg-primary/90"
+            >
+              <span className="flex h-10 w-10 items-center justify-center rounded-l-full bg-white">
+                <FcGoogle className="!h-6 !w-6" />
+              </span>
+              <span className="w-full">SIGN IN WITH GOOGLE</span>
+            </a>
+          </div>
         </section>
 
         <AccountConfirmationDialog open={alertOpen} setOpen={setAlertOpen} />

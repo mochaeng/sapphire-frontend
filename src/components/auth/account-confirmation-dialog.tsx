@@ -17,7 +17,7 @@ export function AccountConfirmationDialog({
 }) {
   return (
     <AlertDialog open={isOpen} onOpenChange={setOpen}>
-      <AlertDialogContent>
+      <AlertDialogContent className="rounded-lg">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-sapphire font-medium">
             Check Your Email
