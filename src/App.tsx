@@ -9,6 +9,7 @@ import AuthUserProvider from "./provider/auth/auth-user-provider";
 import { ThemeProvider } from "./provider/theme/theme-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import CreatePage from "./pages/create-page";
+import OAuthSuccess from "./components/auth/oauth-success";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <HomePage /> },
       { path: ":username", element: <ProfilePage /> },
+      {
+        path: "auth",
+        children: [{ path: "oauth-success", element: <OAuthSuccess /> }],
+      },
       {
         path: "posts",
         children: [

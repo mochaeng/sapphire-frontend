@@ -6,6 +6,7 @@ import { useState } from "react";
 import AccountConfirmationDialog from "./account-confirmation-dialog";
 import { FcGoogle } from "react-icons/fc";
 import { API_URL } from "@/lib/api/utils";
+import OAuthButton from "./oauth-button";
 
 function AuthPanel() {
   const [isLogin, setIsLogin] = useState(true);
@@ -16,15 +17,15 @@ function AuthPanel() {
     title = "Create your account";
   }
 
-  const handleOpenSignup = () => {
+  const openSignupHandle = () => {
     setIsLogin(false);
   };
 
-  const handleOpenLogin = () => {
+  const openLoginHandle = () => {
     setIsLogin(true);
   };
 
-  const handleGoogleSignIn = () => {
+  const googleSignInHandle = () => {
     window.location.href = `${API_URL}/v1/auth/google/login`;
   };
 
@@ -46,30 +47,26 @@ function AuthPanel() {
             <SigninForm />
           ) : (
             <SignupForm
-              onOpenLogin={handleOpenLogin}
+              onOpenLogin={openLoginHandle}
               setAlertOpen={setAlertOpen}
             />
           )}
 
           <div className="p-4">
             <AuxPanel
-              onOpenLogin={handleOpenLogin}
-              onOpenSignup={handleOpenSignup}
+              onOpenLogin={openLoginHandle}
+              onOpenSignup={openSignupHandle}
               isLogin={isLogin}
             />
           </div>
 
           <div className="w-full max-w-authForm">
-            <a
-              // onClick={handleGoogleSignIn}
-              href={`${API_URL}/v1/auth/google/login`}
-              className="flex h-11 w-full cursor-pointer items-center justify-start rounded-full border-2 border-primary bg-primary text-center text-small font-medium text-white shadow hover:bg-primary/90"
+            <OAuthButton
+              description="SIGN IN WITH GOOGLE"
+              onClick={googleSignInHandle}
             >
-              <span className="flex h-10 w-10 items-center justify-center rounded-l-full bg-white">
-                <FcGoogle className="!h-6 !w-6" />
-              </span>
-              <span className="w-full">SIGN IN WITH GOOGLE</span>
-            </a>
+              <FcGoogle className="!h-6 !w-6" />
+            </OAuthButton>
           </div>
         </section>
 
