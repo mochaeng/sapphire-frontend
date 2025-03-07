@@ -1,5 +1,4 @@
 import ContentPost from "../posts/content-post";
-import ImagePost from "../posts/image-post";
 import TextPost from "../posts/text-post";
 import RightSidebar from "../right-sidebar";
 import { Button } from "../ui/button";
@@ -11,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { createPostFormSchema } from "@/lib/posts-validation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import MediaPost from "../posts/media-post";
 
 function TimelinePanel() {
   const navigate = useNavigate();
@@ -42,7 +42,7 @@ function TimelinePanel() {
               This is going to be so special week with Thanksgiving and black
               Friday coming up 😊🚀✨
             </TextPost>
-            <ImagePost
+            <MediaPost
               src={postImageURL2}
               alt="chaeyoung from twice kpop group"
             />

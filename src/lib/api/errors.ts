@@ -19,6 +19,13 @@ export class ServerError extends Error {
   }
 }
 
+export class NotFoundError extends Error {
+  constructor(message: string = "Nothing was found") {
+    super(message);
+    this.name = "NotFoundError";
+  }
+}
+
 export class DefaultError extends Error {
   constructor(message: string) {
     super(message);

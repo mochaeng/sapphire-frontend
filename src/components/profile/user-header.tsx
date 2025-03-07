@@ -1,7 +1,7 @@
 import { ArrowLeft, ExternalLink, Gem, Image, UsersRound } from "lucide-react";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserProfileInfo } from "@/lib/api/responses";
 
@@ -102,4 +102,4 @@ function UserHeader({ profile }: { profile: UserProfileInfo }) {
   );
 }
 
-export default UserHeader;
+export default React.memo(UserHeader);

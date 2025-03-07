@@ -7,7 +7,7 @@ function ContentPost({
   ...props
 }: { children: React.ReactNode } & React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div {...props}>
+    <div className="w-full" {...props}>
       <div className="pb-3 text-primaryOnly">
         <div className="h-3"></div>
         <HeaderPost />

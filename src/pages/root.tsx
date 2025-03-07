@@ -1,7 +1,7 @@
 import Header from "@/components/header";
 // import { useAuth } from "@/hooks/use-auth";
 import { useAuthUser } from "@/hooks/use-auth-user";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 
 function Root() {
@@ -36,4 +36,4 @@ function Root() {
   }
 }
 
-export default Root;
+export default React.memo(Root);

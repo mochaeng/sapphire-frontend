@@ -1,8 +1,9 @@
-function ImagePost({
+function MediaPost({
   src,
   alt,
   ...props
 }: { src: string; alt: string } & React.HTMLAttributes<HTMLDivElement>) {
+  console.log("source: ", src);
   return (
     <div
       {...props}
@@ -17,4 +18,4 @@ function ImagePost({
   );
 }
 
-export default ImagePost;
+export default MediaPost;

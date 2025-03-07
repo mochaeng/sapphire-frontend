@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import ErrorPage from "./error-page";
 import { useQuery } from "@tanstack/react-query";
 import { fetchUserProfile } from "@/lib/api/user";
+import React from "react";
 
 function ProfilePage() {
   const { username } = useParams();
@@ -27,7 +28,7 @@ function ProfilePage() {
 
   return (
     <div className="flex pb-headerWithOffset md:pb-0">
-      <div className="flex w-full max-w-centerWrapper">
+      <div className="flex w-full max-w-centerWrapper lg-1:w-[632px]">
         {data ? <UserProfile profile={data} /> : null}
       </div>
 
@@ -39,4 +40,4 @@ function ProfilePage() {
   );
 }
 
-export default ProfilePage;
+export default React.memo(ProfilePage);
