@@ -1,11 +1,11 @@
 import { ArrowLeft, ExternalLink, Gem, Image, UsersRound } from "lucide-react";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserProfileInfo } from "@/lib/api/responses";
 
-function BannerStats({
+const BannerStats = React.memo(function BannerStats({
   numbers,
   children,
   className,
@@ -20,34 +20,43 @@ function BannerStats({
       {numbers}
     </span>
   );
-}
+});
 
 function UserHeader({ profile }: { profile: UserProfileInfo }) {
-  const [prevScrollpos, setPrevScrollpos] = useState(0);
   const [isStyckyHeader, setIsStyckyHeader] = useState(false);
   const navigate = useNavigate();
 
   const fullName = `${profile.first_name} ${profile?.last_name || ""}`;
 
+  const lastScrollY = useRef(0);
+  const animationFrame = useRef<number>();
+
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollPos = window.scrollY;
+      if (animationFrame.current) return;
 
-      if (currentScrollPos > 180) {
-        setIsStyckyHeader(true);
-      } else {
-        setIsStyckyHeader(false);
-      }
+      animationFrame.current = requestAnimationFrame(() => {
+        const currentScrollY = window.scrollY;
 
-      setPrevScrollpos(currentScrollPos);
+        if (
+          (currentScrollY > 180 && lastScrollY.current <= 180) ||
+          (currentScrollY <= 180 && lastScrollY.current > 180)
+        ) {
+          setIsStyckyHeader(currentScrollY > 180);
+        }
+
+        lastScrollY.current = currentScrollY;
+        animationFrame.current = undefined;
+      });
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      if (animationFrame.current) cancelAnimationFrame(animationFrame.current);
     };
-  }, [prevScrollpos]);
+  }, []);
 
   return (
     <div
