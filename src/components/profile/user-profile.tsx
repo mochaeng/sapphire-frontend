@@ -70,7 +70,7 @@ function UserProfile({ profile }: { profile: UserProfileInfo }) {
         data.pages.map((page, pageInedx) => (
           <div key={pageInedx}>
             {page.posts.map((post) => (
-              <ContentPost key={post.id}>
+              <ContentPost key={post.id} user={page.user} post={post}>
                 <TextPost>{post.content}</TextPost>
                 {post.media_url && (
                   <MediaPost

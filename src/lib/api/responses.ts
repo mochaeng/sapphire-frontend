@@ -27,7 +27,7 @@ export const UserProfileResponseSchema = z.object({
 export type UserProfileInfo = z.infer<typeof UserProfileResponseSchema>;
 
 export const UserResponseSchema = z.object({
-  id: z.string().optional(),
+  id: z.number().optional(),
   username: z.string(),
   first_name: z.string().optional(),
   last_name: z.string().optional(),
@@ -42,19 +42,7 @@ export const UserPostsResponseSchema = z.object({
   tags: z.array(z.string()).optional(),
   created_at: z.string(),
   updated_at: z.string(),
-  user: z
-    .object({
-      id: z.number(),
-      username: z.string(),
-      first_name: z.string(),
-      last_name: z.string().optional(),
-    })
-    .transform((user) => ({
-      ...user,
-      firstName: user.first_name,
-      lastName: user.last_name,
-    }))
-    .optional(),
+  user: UserResponseSchema.optional(),
 });
 export type UserPosts = z.infer<typeof UserPostsResponseSchema>;
 
@@ -64,3 +52,9 @@ export const GetUserPostsResponseSchema = z.object({
   next_cursor: z.string().optional(),
 });
 export type GetUserPostsResponse = z.infer<typeof GetUserPostsResponseSchema>;
+
+export const GetUserFeedResponseSchema = z.object({
+  posts: z.array(UserPostsResponseSchema),
+  next_cursor: z.string().optional(),
+});
+export type GetUserFeedResponse = z.infer<typeof GetUserFeedResponseSchema>;
