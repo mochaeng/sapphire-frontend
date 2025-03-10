@@ -7,10 +7,15 @@ import { createPostFormSchema } from "@/lib/posts-validation";
 import { PostCreatePayload } from "@/lib/api/payloads";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
 
 function CreatePanel() {
+  const navigate = useNavigate();
   const { mutate, isPending } = useMutation({
     mutationFn: fetchCreatePost,
+    onSuccess: () => {
+      navigate("/");
+    },
     onError: (error) => {
       console.log(error);
     },
@@ -38,7 +43,11 @@ function CreatePanel() {
   return (
     <div className="w-full">
       <CreateHeader form={form} onSubmit={onSubmit} isPending={isPending} />
-      <CreatePostForm form={form} />
+      <CreatePostForm
+        isPending={isPending}
+        disableMediaButtons={false}
+        form={form}
+      />
     </div>
   );
 }

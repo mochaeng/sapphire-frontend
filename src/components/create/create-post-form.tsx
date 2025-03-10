@@ -12,21 +12,30 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { AutoResizeTextarea } from "../autoresize-textarea";
 import { Film, Image } from "lucide-react";
-import AddMediaButton from "./add-media-button";
+import { AddMediaButton, ImageMediaButton } from "./add-media-button";
+import MediaFormVisualizer from "./media-form-visualizer";
+
+const MaxPostsLimits = 1;
 
 function CreatePostForm({
   form,
+  disableMediaButtons,
+  isPending,
   ...props
 }: {
   form: UseFormReturn<z.infer<typeof createPostFormSchema>>;
+  disableMediaButtons: boolean;
+  isPending: boolean;
 } & React.HTMLAttributes<HTMLFormElement>) {
   const location = useLocation();
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [files, setFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const isDisable =
+    files.length >= MaxPostsLimits || disableMediaButtons || isPending;
 
   const handleAddFile = (type: "image" | "video") => {
-    if (files.length < 4 && fileInputRef.current) {
+    if (files.length < MaxPostsLimits && fileInputRef.current) {
       fileInputRef.current.accept = type === "video" ? "video/*" : "image/*";
       fileInputRef.current.click();
     }
@@ -49,6 +58,13 @@ function CreatePostForm({
       textAreaRef.current.focus();
     }
   });
+
+  const removeFileHandle = (index: number) => {
+    const newFiles = [...files];
+    newFiles.splice(index, 1);
+    setFiles(newFiles);
+    form?.setValue("media", newFiles);
+  };
 
   return (
     <Form {...form}>
@@ -76,35 +92,20 @@ function CreatePostForm({
           )}
         />
 
-        <div className="flex gap-2 px-4">
-          {files.map((file, index) => (
-            <div key={index} className="relative">
-              {file.type.startsWith("image/") ? (
-                <img
-                  src={URL.createObjectURL(file)}
-                  alt={`upload-${index}`}
-                  className="h-16 w-16 rounded object-cover"
-                />
-              ) : (
-                <video
-                  src={URL.createObjectURL(file)}
-                  className="h-16 w-16 rounded object-cover"
-                  controls
-                />
-              )}
-            </div>
-          ))}
-        </div>
+        <MediaFormVisualizer onRemoveFile={removeFileHandle} files={files} />
 
         <div className="flex items-center gap-2 px-4 py-1 text-secondaryOnly">
-          <AddMediaButton onClick={() => handleAddFile("image")}>
-            <Image
-              size={22}
-              className="hover:bg-secondary hover:text-primary"
-            />
+          <AddMediaButton
+            disabled={isDisable}
+            onClick={() => handleAddFile("image")}
+          >
+            <ImageMediaButton Icon={Image} disableMediaButtons />
           </AddMediaButton>
-          <AddMediaButton onClick={() => handleAddFile("video")}>
-            <Film size={22} className="hover:bg-secondary hover:text-primary" />
+          <AddMediaButton
+            disabled={isDisable}
+            onClick={() => handleAddFile("video")}
+          >
+            <ImageMediaButton Icon={Film} disableMediaButtons />
           </AddMediaButton>
           <input
             type="file"

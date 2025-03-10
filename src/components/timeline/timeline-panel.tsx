@@ -5,16 +5,16 @@ import { Button } from "../ui/button";
 import TimelineHeader from "./timeline-header";
 import { useNavigate } from "react-router-dom";
 import CreatePostForm from "../create/create-post-form";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { createPostFormSchema } from "@/lib/posts-validation";
-import { zodResolver } from "@hookform/resolvers/zod";
 import MediaPost from "../posts/media-post";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { fetchUserFeed } from "@/lib/api/posts";
 import { GetUserFeedResponse } from "@/lib/api/responses";
 import { useEffect } from "react";
 import { API_URL } from "@/lib/api/utils";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { createPostFormSchema } from "@/lib/posts-validation";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 function TimelinePanel() {
   const navigate = useNavigate();
@@ -75,7 +75,12 @@ function TimelinePanel() {
       <div className="flex w-full max-w-centerWrapper flex-col">
         <TimelineHeader />
 
-        <CreatePostForm form={form} onClick={handleClick} />
+        <CreatePostForm
+          isPending={false}
+          disableMediaButtons={true}
+          form={form}
+          onClick={handleClick}
+        />
 
         {status === "pending" && (
           <div className="p-4 text-center">Loading posts...</div>

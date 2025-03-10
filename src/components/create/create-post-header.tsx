@@ -1,8 +1,8 @@
 import { createPostFormSchema } from "@/lib/posts-validation";
 import BackButton from "../back-button";
 import { z } from "zod";
-import { UseFormReturn } from "react-hook-form";
 import { cn } from "@/lib/utils";
+import { UseFormReturn } from "react-hook-form";
 
 function CreateHeader({
   form,
@@ -16,7 +16,7 @@ function CreateHeader({
   const content = form.watch("content");
 
   const hasContent = content.trim().length > 0;
-  const isDisable = hasContent || isPending;
+  const isDisable = !hasContent || isPending;
 
   return (
     <div className="sticky top-0 z-10 flex h-14 w-full items-center justify-between gap-2 border-b-1 border-[#8a96a3]/25 bg-background px-4 text-profileHeader">
@@ -29,14 +29,14 @@ function CreateHeader({
 
       <button
         type="submit"
-        disabled={!isDisable}
+        disabled={isDisable}
         className={cn(
           "rounded-full bg-secondaryOnly px-4 py-2 text-small font-medium opacity-30",
-          { "bg-primary opacity-100": hasContent },
+          { "bg-primary opacity-100": !isDisable },
         )}
         onClick={form.handleSubmit(onSubmit)}
       >
-        POST
+        {isPending ? "POSTING..." : "POST"}
       </button>
     </div>
   );
