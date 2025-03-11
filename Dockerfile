@@ -6,6 +6,7 @@ RUN corepack enable
 FROM base AS builder
 # ARG VITE_API_URL
 ENV VITE_API_URL="__RUNTIME_API_URL__"
+ENV VITE_STATIC_URL="__RUNTIME_STATIC_URL__"
 COPY . /app
 WORKDIR /app
 
