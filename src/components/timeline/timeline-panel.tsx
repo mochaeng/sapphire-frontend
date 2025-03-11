@@ -10,7 +10,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { fetchUserFeed } from "@/lib/api/posts";
 import { GetUserFeedResponse } from "@/lib/api/responses";
 import { useEffect } from "react";
-import { API_URL } from "@/lib/api/utils";
+import { STATIC_URL } from "@/lib/api/utils";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { createPostFormSchema } from "@/lib/posts-validation";
@@ -100,7 +100,7 @@ function TimelinePanel() {
                   <TextPost>{post.content}</TextPost>
                   {post.media_url && (
                     <MediaPost
-                      src={`${API_URL}/${post.media_url}`}
+                      src={`${STATIC_URL}/${post.media_url}`}
                       alt="image for the post"
                     />
                   )}

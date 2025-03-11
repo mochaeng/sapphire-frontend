@@ -8,7 +8,7 @@ import { GetUserPostsResponse, UserProfileInfo } from "@/lib/api/responses";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { fetchUserPosts } from "@/lib/api/posts";
 import { useEffect } from "react";
-import { API_URL } from "@/lib/api/utils";
+import { STATIC_URL } from "@/lib/api/utils";
 import MediaPost from "../posts/media-post";
 
 function UserProfile({ profile }: { profile: UserProfileInfo }) {
@@ -74,7 +74,7 @@ function UserProfile({ profile }: { profile: UserProfileInfo }) {
                 <TextPost>{post.content}</TextPost>
                 {post.media_url && (
                   <MediaPost
-                    src={`${API_URL}/${post.media_url}`}
+                    src={`${STATIC_URL}/${post.media_url}`}
                     alt="image for the post"
                   />
                 )}
