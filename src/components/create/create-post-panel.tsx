@@ -1,20 +1,25 @@
 import { fetchCreatePost } from "@/lib/api/posts";
 import CreatePostForm from "./create-post-form";
 import CreateHeader from "./create-post-header";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 import { createPostFormSchema } from "@/lib/posts-validation";
 import { PostCreatePayload } from "@/lib/api/payloads";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router-dom";
+import useCreatePostFormStore from "@/store/create-post-form-store";
 
 function CreatePanel() {
-  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { setFiles } = useCreatePostFormStore();
+
   const { mutate, isPending } = useMutation({
     mutationFn: fetchCreatePost,
     onSuccess: () => {
-      navigate("/");
+      queryClient.invalidateQueries({ queryKey: ["userFeed"] });
+      form.reset({ content: "", media: null, tags: [] });
+      setFiles([]);
+      // navigate("/", { replace: true, state: { newPost: true } });
     },
     onError: (error) => {
       console.log(error);

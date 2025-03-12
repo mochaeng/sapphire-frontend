@@ -8,12 +8,13 @@ import {
   FormItem,
   FormMessage,
 } from "../ui/form";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { AutoResizeTextarea } from "../autoresize-textarea";
 import { Film, Image } from "lucide-react";
 import { AddMediaButton, ImageMediaButton } from "./add-media-button";
 import MediaFormVisualizer from "./media-form-visualizer";
+import useCreatePostFormStore from "@/store/create-post-form-store";
 
 const MaxPostsLimits = 1;
 
@@ -29,8 +30,8 @@ function CreatePostForm({
 } & React.HTMLAttributes<HTMLFormElement>) {
   const location = useLocation();
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const [files, setFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { files, setFiles } = useCreatePostFormStore();
   const isDisable =
     files.length >= MaxPostsLimits || disableMediaButtons || isPending;
 

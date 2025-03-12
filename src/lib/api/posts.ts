@@ -6,10 +6,9 @@ import {
 } from "./responses";
 import { API_URL } from "./utils";
 
-const LIMIT = 1;
+const LIMIT = 5;
 
 export async function fetchCreatePost(payload: PostCreatePayload) {
-  console.log(payload);
   const formData = new FormData();
   formData.append("content", payload.content);
 
@@ -27,7 +26,17 @@ export async function fetchCreatePost(payload: PostCreatePayload) {
     body: formData,
   });
 
-  console.log(response);
+  if (
+    response.status === 400 ||
+    response.status === 403 ||
+    response.status === 500
+  ) {
+    throw tryAgainError;
+  }
+  if (response.status === 201) {
+    return;
+  }
+  throw tryAgainError;
 }
 
 export async function fetchUserPosts(username: string, cursor?: string) {

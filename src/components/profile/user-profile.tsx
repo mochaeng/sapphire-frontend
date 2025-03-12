@@ -50,7 +50,7 @@ function UserProfile({ profile }: { profile: UserProfileInfo }) {
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   return (
-    <div className="w-full border-r-1 border-[#8a96a3]/25">
+    <div className="w-full">
       <UserHeader profile={profile} />
       <UserBanner />
       <UserInfo profile={profile} />

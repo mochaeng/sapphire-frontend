@@ -32,6 +32,7 @@ function TimelinePanel() {
     initialPageParam: "",
     getNextPageParam: (lastPage: GetUserFeedResponse) =>
       lastPage.next_cursor || undefined,
+    refetchInterval: 15 * 1000,
   });
 
   const form = useForm<z.infer<typeof createPostFormSchema>>({
