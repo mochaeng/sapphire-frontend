@@ -62,6 +62,12 @@ export default {
       borderWidth: {
         1: "1px",
       },
+      borderColor: {
+        custom: ({ opacityValue }) =>
+          opacityValue
+            ? `rgb(138 150 163 / ${opacityValue})`
+            : "rgb(138 150 163)",
+      },
       screens: {
         md: "500px",
         lg: "616px",

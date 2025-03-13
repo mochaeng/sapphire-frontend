@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const AuthMeResponseSchema = z.object({
+  id: z.number(),
   username: z.string(),
   email: z.string().email(),
   first_name: z.string(),
@@ -9,6 +10,7 @@ export const AuthMeResponseSchema = z.object({
 });
 
 export const UserProfileResponseSchema = z.object({
+  user_id: z.number(),
   username: z.string(),
   first_name: z.string(),
   last_name: z.string().optional(),

@@ -10,6 +10,7 @@ import { ThemeProvider } from "./provider/theme/theme-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import CreatePage from "./pages/create-page";
 import OAuthSuccess from "./components/auth/oauth-success";
+import EditProfilePage from "./pages/edit-profile-page";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,12 @@ const router = createBrowserRouter([
         path: "my",
         element: <ProtectedLayout />,
         children: [
+          {
+            path: "settings",
+            children: [
+              { index: true, path: "profile", element: <EditProfilePage /> },
+            ],
+          },
           { path: "notifications" },
           { path: "messages" },
           { path: "collections" },

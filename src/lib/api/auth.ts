@@ -90,6 +90,7 @@ export async function fetchAuthMe() {
       throw new DefaultError("fail parsing");
     }
     const user: AuthUser = {
+      id: parsed.data.id,
       email: parsed.data.email,
       firstName: parsed.data.first_name,
       lastName: parsed.data.last_name || "",
@@ -116,6 +117,5 @@ export async function fetchAuthSignout() {
     },
     credentials: "include",
   });
-  console.log(response);
   return response.status === 204;
 }

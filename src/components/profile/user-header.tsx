@@ -61,7 +61,7 @@ function UserHeader({ profile }: { profile: UserProfileInfo }) {
   return (
     <div
       className={cn(
-        "sticky -top-14 z-10 -mb-14 flex h-14 w-[633px] items-center justify-between bg-transparent text-profileHeader",
+        "sticky -top-14 z-10 -mb-14 flex h-14 items-center justify-between bg-transparent text-profileHeader",
         {
           "top-0 border-b-1 border-[#8a96a3]/25 bg-background text-primaryOnly transition-all ease-in-out":
             isStyckyHeader,

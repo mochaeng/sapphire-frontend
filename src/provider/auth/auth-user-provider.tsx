@@ -32,8 +32,10 @@ export default function AuthUserProvider({
     return <div>Loading...</div>;
   }
 
+  const isReady = user.isAuthenticated !== undefined;
+
   return (
-    <AuthUserContext.Provider value={{ user, setUser, logout }}>
+    <AuthUserContext.Provider value={{ user, setUser, logout, isReady }}>
       {children}
     </AuthUserContext.Provider>
   );

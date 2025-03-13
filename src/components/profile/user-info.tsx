@@ -1,13 +1,15 @@
-import { ExternalLink, Link, MapPin } from "lucide-react";
+import { ExternalLink, Link, MapPin, Settings } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useEffect, useRef, useState } from "react";
 import { UserProfileInfo } from "@/lib/api/responses";
+import { NavLink } from "react-router-dom";
+import { useAuthUser } from "@/hooks/use-auth-user";
 
-const profileURL = "https://i.redd.it/n6t768hnhr3e1.png";
-// const profileURL = "";
+const profileURL = "";
 
 function UserInfo({ profile }: { profile: UserProfileInfo }) {
+  const { user } = useAuthUser();
   const fullName = `${profile.first_name} ${profile.last_name || ""}`;
   const nameAcronym = `${profile.first_name[0].toUpperCase()}${profile.last_name?.[0]?.toUpperCase() || ""}`;
 
@@ -15,9 +17,20 @@ function UserInfo({ profile }: { profile: UserProfileInfo }) {
     <div className="flex flex-col gap-2 px-4 py-4">
       <div className="flex items-center justify-between">
         <UserAvatar nameAcronym={nameAcronym} />
-        <Button className="size-12 rounded-full border border-[#8a96a3]/25 bg-background hover:border hover:border-primary hover:bg-background">
-          <ExternalLink className="!size-6 text-primary" />
-        </Button>
+        <div className="flex gap-2 text-small font-medium text-primary">
+          {user.isAuthenticated && user.id === profile.user_id ? (
+            <NavLink
+              to="/my/settings/profile"
+              className="border-custom/25 flex items-center justify-center gap-2 rounded-full border px-2"
+            >
+              <Settings className="!size-6" />
+              <span>EDIT PROFILE</span>
+            </NavLink>
+          ) : null}
+          <Button className="border-custom/25 size-12 rounded-full border bg-background shadow-none hover:border hover:border-primary hover:bg-background">
+            <ExternalLink className="!size-6 text-primary" />
+          </Button>
+        </div>
       </div>
       <div className="flex flex-col">
         <span className="text-sapphire font-medium text-primaryOnly">
