@@ -5,29 +5,31 @@ import { useEffect, useRef, useState } from "react";
 import { UserProfileInfo } from "@/lib/api/responses";
 import { NavLink } from "react-router-dom";
 import { useAuthUser } from "@/hooks/use-auth-user";
+import { GetNameAcronym } from "@/lib/utils";
 
-const profileURL = "";
+// const profileURL = "";
 
 function UserInfo({ profile }: { profile: UserProfileInfo }) {
   const { user } = useAuthUser();
   const fullName = `${profile.first_name} ${profile.last_name || ""}`;
-  const nameAcronym = `${profile.first_name[0].toUpperCase()}${profile.last_name?.[0]?.toUpperCase() || ""}`;
+  // const nameAcronym = `${profile.first_name[0].toUpperCase()}${profile.last_name?.[0]?.toUpperCase() || ""}`;
+  const nameAcronym = GetNameAcronym(profile.first_name, profile?.last_name);
 
   return (
     <div className="flex flex-col gap-2 px-4 py-4">
       <div className="flex items-center justify-between">
-        <UserAvatar nameAcronym={nameAcronym} />
+        <UserAvatar profileURL={profile.avatar_url} nameAcronym={nameAcronym} />
         <div className="flex gap-2 text-small font-medium text-primary">
           {user.isAuthenticated && user.id === profile.user_id ? (
             <NavLink
               to="/my/settings/profile"
-              className="border-custom/25 flex items-center justify-center gap-2 rounded-full border px-2"
+              className="flex items-center justify-center gap-2 rounded-full border border-custom/25 px-2"
             >
               <Settings className="!size-6" />
               <span>EDIT PROFILE</span>
             </NavLink>
           ) : null}
-          <Button className="border-custom/25 size-12 rounded-full border bg-background shadow-none hover:border hover:border-primary hover:bg-background">
+          <Button className="size-12 rounded-full border border-custom/25 bg-background shadow-none hover:border hover:border-primary hover:bg-background">
             <ExternalLink className="!size-6 text-primary" />
           </Button>
         </div>
@@ -43,7 +45,13 @@ function UserInfo({ profile }: { profile: UserProfileInfo }) {
   );
 }
 
-function UserAvatar({ nameAcronym }: { nameAcronym: string }) {
+export function UserAvatar({
+  nameAcronym,
+  profileURL,
+}: {
+  nameAcronym: string;
+  profileURL: string | undefined;
+}) {
   return (
     <Avatar className="-mt-12 size-24 border-2 border-background bg-background">
       <AvatarImage src={profileURL} className="object-cover" />

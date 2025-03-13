@@ -4,8 +4,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import EditProfileHeader from "./edit-profile-header";
 import EditProfileForm from "./edit-profile-form";
+import { UserProfileInfo } from "@/lib/api/responses";
 
-function ProfileSettingsPanel() {
+function ProfileSettingsPanel({ profile }: { profile: UserProfileInfo }) {
   const form = useForm<z.infer<typeof editProfileFormSchema>>({
     resolver: zodResolver(editProfileFormSchema),
     mode: "onSubmit",
@@ -23,7 +24,7 @@ function ProfileSettingsPanel() {
   return (
     <div>
       <EditProfileHeader />
-      <EditProfileForm form={form} isPending={false} />
+      <EditProfileForm profile={profile} form={form} isPending={false} />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { ForwardRefExoticComponent, RefAttributes } from "react";
 export function AddMediaButton({
   children,
   disabled,
+  className,
   ...props
 }: {
   disabled?: boolean;
@@ -13,9 +14,13 @@ export function AddMediaButton({
   return (
     <button
       {...props}
-      className={cn("h-8 w-8 rounded-full p-1 disabled:opacity-45", {
-        "hover:bg-secondary hover:text-primary": !disabled,
-      })}
+      className={cn(
+        "flex h-8 w-8 items-center justify-center rounded-full p-1 disabled:opacity-45",
+        {
+          "hover:bg-secondary hover:text-primary": !disabled,
+        },
+        className,
+      )}
       disabled={disabled}
     >
       {children}
