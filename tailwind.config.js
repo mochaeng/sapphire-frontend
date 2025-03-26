@@ -90,6 +90,7 @@ export default {
         sapphire: "1296px",
         centerWrapper: "632px",
         rightWrapper: "384px",
+        settingsPage: "1080px",
       },
       maxHeight: {
         post: "calc(var(--vh, 1vh)*100 - 130px)",

@@ -22,7 +22,7 @@ function ProfileSettingsPanel({ profile }: { profile: UserProfileInfo }) {
   });
 
   return (
-    <div>
+    <div className="max-w-settingsPage">
       <EditProfileHeader />
       <EditProfileForm profile={profile} form={form} isPending={false} />
     </div>
