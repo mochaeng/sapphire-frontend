@@ -8,12 +8,12 @@ import {
   FormItem,
   FormMessage,
 } from "../ui/form";
-import { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { UserProfileInfo } from "@/lib/api/responses";
 import { EditAvatarProfile } from "./edit-avatar-profile";
 import { EditBannerProfile } from "./edit-banner-profile";
 
-function EditProfileForm({
+const EditProfileForm = React.memo(function EditProfileForm({
   profile,
   form,
   isPending,
@@ -25,26 +25,29 @@ function EditProfileForm({
 } & React.HTMLAttributes<HTMLFormElement>) {
   const profileImageInputRef = useRef<HTMLInputElement>(null);
   const bannerImageInputRef = useRef<HTMLInputElement>(null);
+  const [isAvatarDialogOpen, setIsAvatarDialogOpen] = useState(false);
 
   const [profileImage, setProfileImage] = useState<File | string | null>(
     profile.avatar_url || null,
   );
   const [bannerImage, setBannerImage] = useState<File | string | null>(null);
 
-  const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setProfileImage(file);
-      form.setValue("profileImage", file);
-    }
-  };
+  const handleProfileImageChangeInput = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      console.log("hallo");
+      if (file) {
+        setProfileImage(file);
+        form.setValue("profileImage", file);
+        setIsAvatarDialogOpen(true);
+      }
+    },
+    [form, setIsAvatarDialogOpen],
+  );
 
-  const removeProfileImage = () => {
-    setProfileImage(null);
-    form.setValue("profileImage", null);
-  };
-
-  const handleBannerImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleBannerImageChangeInput = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = e.target.files?.[0];
     if (file) {
       setBannerImage(file);
@@ -52,10 +55,19 @@ function EditProfileForm({
     }
   };
 
-  const removeBannerImage = () => {
+  const removeProfileImage = useCallback(() => {
+    setProfileImage(null);
+    form.setValue("profileImage", null);
+  }, [form]);
+
+  const handleProfileImageChange = useCallback(() => {
+    profileImageInputRef.current?.click();
+  }, []);
+
+  const removeBannerImage = useCallback(() => {
     setBannerImage(null);
     form.setValue("bannerImage", null);
-  };
+  }, [form, setBannerImage]);
 
   return (
     <Form {...form}>
@@ -90,8 +102,10 @@ function EditProfileForm({
               <FormControl>
                 <EditAvatarProfile
                   profileImage={profileImage}
-                  onImageChange={() => profileImageInputRef.current?.click()}
+                  onImageChange={handleProfileImageChange}
                   onRemoveImage={removeProfileImage}
+                  isAvatarDialogOpen={isAvatarDialogOpen}
+                  setIsAvatarDialogOpen={setIsAvatarDialogOpen}
                   firstName={profile.first_name}
                   lastName={profile.last_name}
                 />
@@ -105,19 +119,19 @@ function EditProfileForm({
           type="file"
           ref={profileImageInputRef}
           className="hidden"
-          onChange={handleProfileImageChange}
+          onChange={handleProfileImageChangeInput}
           accept="image/*"
         />
         <input
           type="file"
           ref={bannerImageInputRef}
           className="hidden"
-          onChange={handleBannerImageChange}
+          onChange={handleBannerImageChangeInput}
           accept="image/*"
         />
       </form>
     </Form>
   );
-}
+});
 
 export default EditProfileForm;

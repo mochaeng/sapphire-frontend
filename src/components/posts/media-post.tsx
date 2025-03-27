@@ -3,7 +3,6 @@ function MediaPost({
   alt,
   ...props
 }: { src: string; alt: string } & React.HTMLAttributes<HTMLDivElement>) {
-  console.log("source: ", src);
   return (
     <div
       {...props}

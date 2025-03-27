@@ -94,6 +94,7 @@ export default {
       },
       maxHeight: {
         post: "calc(var(--vh, 1vh)*100 - 130px)",
+        editAvatar: "calc(var(--vh, 1vh)*100 - 0px)",
       },
       fontSize: {
         fontPrimary: "19px",
