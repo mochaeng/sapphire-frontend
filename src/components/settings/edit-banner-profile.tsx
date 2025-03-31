@@ -5,6 +5,11 @@ type EditBannerProfileProps = {
   bannerImage: string | File | null;
   onImageChange: () => void;
   onRemoveImage: () => void;
+  isAvatarDialogOpen: boolean;
+  setIsAvatarDialogOpen: (isOpen: boolean) => void;
+  onCropComplete: (file: File) => void;
+  temporaryBannerImage?: string | null;
+  onDialogClose: (shouldSave: boolean) => void;
 };
 
 export function EditBannerProfile({

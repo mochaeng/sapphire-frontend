@@ -57,3 +57,21 @@ export function toCamel<T extends object>(o: T): CamelizeKeys<T> {
     return newO as CamelizeKeys<T>;
   }
 }
+
+export function readFile(file: File): Promise<string | null> {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.addEventListener(
+      "load",
+      () => resolve(reader.result as string | null),
+      false,
+    );
+    reader.readAsDataURL(file);
+  });
+}
+
+export const getAvatarSrc = (img: string | File | undefined | null) => {
+  if (typeof img === "string") return img;
+  if (img instanceof File) return URL.createObjectURL(img);
+  return undefined;
+};
