@@ -1,4 +1,4 @@
-import { getAvatarSrc, GetNameAcronym } from "@/lib/utils";
+import { cn, getAvatarSrc, GetNameAcronym } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import React, { useCallback, useMemo, useState } from "react";
 import { CroppedArea } from "@/store/edit-profile-avatar-store";
@@ -6,31 +6,34 @@ import { MediaButtons } from "./media-buttons";
 import { ImageEditorDialog } from "./image-editor-dialog";
 import { Point } from "react-easy-crop";
 
-type AvatarProfileEditProps = {
-  profileImage: string | File | null;
+type ImgEditorProps = {
+  image: string | File | null;
   onImageChange: () => void;
   onRemoveImage: () => void;
-  isAvatarDialogOpen: boolean;
-  setIsAvatarDialogOpen: (isOpen: boolean) => void;
-  firstName: string;
-  lastName: string | undefined;
-  onSaveCropValue: (file: File) => void;
+  isDialogOpen: boolean;
+  setIsDialogOpen: (isOpen: boolean) => void;
+  firstName?: string;
+  lastName?: string;
+  onSaveCropFile: (file: File) => void;
   temporaryProfileImage?: string | null;
-  onProfileDialogClose: (shouldSave: boolean) => void;
+  onDialogClose: (shouldSave: boolean) => void;
+  imgType: "avatar" | "banner";
 };
 
-export const EditAvatarProfile = React.memo(function EditAvatarProfile({
-  profileImage,
+export const ImgEditor = React.memo(function ImgEditor({
+  image,
   onImageChange,
   onRemoveImage,
-  isAvatarDialogOpen,
-  setIsAvatarDialogOpen,
+  isDialogOpen: isAvatarDialogOpen,
+  setIsDialogOpen: setIsAvatarDialogOpen,
   firstName,
   lastName,
-  onSaveCropValue,
+  onSaveCropFile,
   temporaryProfileImage,
-  onProfileDialogClose,
-}: AvatarProfileEditProps) {
+  onDialogClose: onProfileDialogClose,
+  imgType = "avatar",
+  className,
+}: ImgEditorProps & React.HTMLAttributes<HTMLDivElement>) {
   const [zoomValue, setZoom] = useState(1);
   const [cropValue, setCrop] = useState({ x: 0, y: 0 } as Point);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState({
@@ -47,21 +50,30 @@ export const EditAvatarProfile = React.memo(function EditAvatarProfile({
     [setCroppedAreaPixels],
   );
 
-  const temporaryAvatarSrc = useMemo(
+  const temporaryImageSrc = useMemo(
     () => getAvatarSrc(temporaryProfileImage),
     [temporaryProfileImage],
   );
 
-  const avatarSrc = useMemo(() => getAvatarSrc(profileImage), [profileImage]);
+  const imgSrc = useMemo(() => getAvatarSrc(image), [image]);
 
   return (
     <>
-      <div className="relative flex size-28 items-center justify-center rounded-full border border-black">
-        <AvatarProfile
-          firstName={firstName}
-          lastName={lastName}
-          avatarSrc={avatarSrc}
-        />
+      <div
+        className={cn(
+          "relative flex items-center justify-center rounded-full",
+          className,
+        )}
+      >
+        {imgType === "avatar" ? (
+          <AvatarProfile
+            firstName={firstName}
+            lastName={lastName}
+            imgSrc={imgSrc}
+          />
+        ) : (
+          <BannerProfile imgSrc={imgSrc} />
+        )}
         <MediaButtons
           onImageChange={onImageChange}
           onRemoveImage={onRemoveImage}
@@ -71,15 +83,15 @@ export const EditAvatarProfile = React.memo(function EditAvatarProfile({
       <ImageEditorDialog
         isOpen={isAvatarDialogOpen}
         setIsOpen={setIsAvatarDialogOpen}
-        imageSrc={temporaryAvatarSrc}
-        temporaryProfileImage={temporaryAvatarSrc}
+        imageSrc={temporaryImageSrc}
+        temporaryProfileImage={temporaryImageSrc}
         croppedAreaPixels={croppedAreaPixels}
         zoomValue={zoomValue}
         setZoom={setZoom}
         cropValue={cropValue}
         setCrop={setCrop}
         onCropComplete={onCropComplete}
-        onSaveCropFile={onSaveCropValue}
+        onSaveCropFile={onSaveCropFile}
         onDialogClose={onProfileDialogClose}
       />
     </>
@@ -87,20 +99,34 @@ export const EditAvatarProfile = React.memo(function EditAvatarProfile({
 });
 
 const AvatarProfile = React.memo(function AvatarProfile({
-  avatarSrc,
+  imgSrc,
   firstName,
   lastName,
 }: {
-  avatarSrc?: string;
-  firstName: string;
+  imgSrc?: string;
+  firstName?: string;
   lastName?: string;
 }) {
   return (
     <Avatar className="size-28">
-      <AvatarImage className="object-cover" src={avatarSrc} />
+      <AvatarImage className="object-cover" src={imgSrc} />
       <AvatarFallback className="bg-secondaryOnlyPlaceholder text-4xl font-bold text-primary">
         {GetNameAcronym(firstName, lastName)}
       </AvatarFallback>
     </Avatar>
+  );
+});
+
+const BannerProfile = React.memo(function BannerProfile({
+  imgSrc,
+}: {
+  imgSrc?: string;
+}) {
+  return imgSrc ? (
+    <img src={imgSrc} alt="Banner" className="h-full w-full object-cover" />
+  ) : (
+    <div className="flex h-full w-full items-center justify-center bg-rose-400 text-gray-500">
+      No banner image
+    </div>
   );
 });

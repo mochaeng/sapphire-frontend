@@ -8,15 +8,10 @@ import {
   FormItem,
   FormMessage,
 } from "../ui/form";
-import React, { useCallback, useRef, useState } from "react";
+import React from "react";
 import { UserProfileInfo } from "@/lib/api/responses";
-import { EditAvatarProfile } from "./edit-avatar-profile";
-import { EditBannerProfile } from "./edit-banner-profile";
-import { readFile } from "@/lib/utils";
-import {
-  croppedAreaDefault,
-  useProfileAvatarStore,
-} from "@/store/edit-profile-avatar-store";
+import { ImgEditor } from "./img-editor";
+import { useProfileImage } from "@/hooks/use-profile-image";
 
 const EditProfileForm = React.memo(function EditProfileForm({
   profile,
@@ -28,89 +23,17 @@ const EditProfileForm = React.memo(function EditProfileForm({
   form: UseFormReturn<z.infer<typeof editProfileFormSchema>>;
   isPending: boolean;
 } & React.HTMLAttributes<HTMLFormElement>) {
-  const profileImageInputRef = useRef<HTMLInputElement>(null);
-  const bannerImageInputRef = useRef<HTMLInputElement>(null);
-  const [isAvatarDialogOpen, setIsAvatarDialogOpen] = useState(false);
-  const setCrop = useProfileAvatarStore((state) => state.setCrop);
-  const setZoom = useProfileAvatarStore((state) => state.setZoom);
-  const setCroppedAreaPixels = useProfileAvatarStore(
-    (state) => state.setCroppedAreaPixels,
-  );
+  const avatar = useProfileImage({
+    form,
+    fieldName: "profileImage",
+    initialImage: profile.avatar_url || null,
+  });
 
-  const [profileImage, setProfileImage] = useState<File | string | null>(
-    profile.avatar_url || null,
-  );
-  const [temporaryProfileImage, setTemporaryProfileImage] = useState<
-    string | null
-  >(null);
-
-  const [bannerImage, setBannerImage] = useState<File | string | null>(null);
-
-  const handleProfileImageChangeInput = useCallback(
-    async (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      if (file) {
-        try {
-          setCrop({ x: 0, y: 0 });
-          setZoom(1);
-          setCroppedAreaPixels(croppedAreaDefault);
-
-          const imageDataUrl = await readFile(file);
-          setTemporaryProfileImage(imageDataUrl);
-          // setProfileImage(imageDataUrl);
-          setIsAvatarDialogOpen(true);
-          e.target.value = "";
-        } catch (e) {
-          console.error(e);
-        }
-      }
-    },
-    [setCrop, setCroppedAreaPixels, setZoom],
-  );
-
-  const handleBannerImageChangeInput = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setBannerImage(file);
-      form.setValue("bannerImage", file);
-    }
-  };
-
-  const removeProfileImage = useCallback(() => {
-    setProfileImage(null);
-    form.setValue("profileImage", null);
-  }, [form]);
-
-  const handleProfileImageChange = useCallback(() => {
-    profileImageInputRef.current?.click();
-  }, []);
-
-  const removeBannerImage = useCallback(() => {
-    setBannerImage(null);
-    form.setValue("bannerImage", null);
-  }, [form, setBannerImage]);
-
-  const handleProfileCropComplete = useCallback(
-    (file: File) => {
-      setProfileImage(file);
-      form.setValue("profileImage", file);
-    },
-    [form],
-  );
-
-  const handleProfileDialogClose = useCallback(
-    (shouldSave: boolean) => {
-      setTemporaryProfileImage(null);
-      if (!shouldSave) {
-        setProfileImage(profile.avatar_url || null);
-        form.setValue("profileImage", null);
-        setIsAvatarDialogOpen(false);
-      }
-    },
-    [form, profile.avatar_url],
-  );
+  const banner = useProfileImage({
+    form,
+    fieldName: "bannerImage",
+    initialImage: profile.banner_url || null,
+  });
 
   return (
     <Form {...form}>
@@ -126,11 +49,18 @@ const EditProfileForm = React.memo(function EditProfileForm({
           render={() => (
             <FormItem>
               <FormControl>
-                {/* <EditBannerProfile
-                  bannerImage={bannerImage}
-                  onImageChange={() => bannerImageInputRef.current?.click()}
-                  onRemoveImage={removeBannerImage}
-                /> */}
+                <ImgEditor
+                  imgType="banner"
+                  className="h-[180px]"
+                  image={banner.image}
+                  onImageChange={banner.handleImageChange}
+                  onRemoveImage={banner.removeImage}
+                  isDialogOpen={banner.isDialogOpen}
+                  setIsDialogOpen={banner.setIsDialogOpen}
+                  onSaveCropFile={banner.handleSaveCropFile}
+                  onDialogClose={banner.handleDialogClose}
+                  temporaryProfileImage={banner.temporaryImage}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -143,17 +73,19 @@ const EditProfileForm = React.memo(function EditProfileForm({
           render={() => (
             <FormItem>
               <FormControl>
-                <EditAvatarProfile
-                  profileImage={profileImage}
-                  onImageChange={handleProfileImageChange}
-                  onRemoveImage={removeProfileImage}
-                  isAvatarDialogOpen={isAvatarDialogOpen}
-                  setIsAvatarDialogOpen={setIsAvatarDialogOpen}
+                <ImgEditor
+                  imgType="avatar"
+                  className="size-28"
                   firstName={profile.first_name}
                   lastName={profile.last_name}
-                  onSaveCropValue={handleProfileCropComplete}
-                  onProfileDialogClose={handleProfileDialogClose}
-                  temporaryProfileImage={temporaryProfileImage}
+                  image={avatar.image}
+                  onImageChange={avatar.handleImageChange}
+                  onRemoveImage={avatar.removeImage}
+                  isDialogOpen={avatar.isDialogOpen}
+                  setIsDialogOpen={avatar.setIsDialogOpen}
+                  onSaveCropFile={avatar.handleSaveCropFile}
+                  onDialogClose={avatar.handleDialogClose}
+                  temporaryProfileImage={avatar.temporaryImage}
                 />
               </FormControl>
               <FormMessage />
@@ -163,16 +95,16 @@ const EditProfileForm = React.memo(function EditProfileForm({
 
         <input
           type="file"
-          ref={profileImageInputRef}
+          ref={avatar.fileInputRef}
           className="hidden"
-          onChange={handleProfileImageChangeInput}
+          onChange={avatar.handleFileInputChange}
           accept="image/*"
         />
         <input
           type="file"
-          ref={bannerImageInputRef}
+          ref={banner.fileInputRef}
           className="hidden"
-          onChange={handleBannerImageChangeInput}
+          onChange={banner.handleFileInputChange}
           accept="image/*"
         />
       </form>

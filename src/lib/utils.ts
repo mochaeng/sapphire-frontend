@@ -13,11 +13,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function GetNameAcronym(
-  firstName: string,
-  lastName: string | undefined,
-) {
-  return `${firstName[0].toUpperCase()}${lastName?.[0].toUpperCase() || ""}`;
+export function GetNameAcronym(firstName?: string, lastName?: string) {
+  return `${firstName?.[0].toUpperCase()}${lastName?.[0].toUpperCase() || ""}`;
 }
 
 type Camelize<T extends string> = T extends `${infer A}_${infer B}`
