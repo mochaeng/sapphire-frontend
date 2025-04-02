@@ -1,10 +1,8 @@
 import { cn, getAvatarSrc, GetNameAcronym } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import React, { useCallback, useMemo, useState } from "react";
-import { CroppedArea } from "@/store/edit-profile-avatar-store";
+import React, { useMemo } from "react";
 import { MediaButtons } from "./media-buttons";
-import { ImageEditorDialog } from "./image-editor-dialog";
-import { Point } from "react-easy-crop";
+import { CropShape, ImageEditorDialog } from "./image-editor-dialog";
 
 type ImgEditorProps = {
   image: string | File | null;
@@ -18,6 +16,8 @@ type ImgEditorProps = {
   temporaryProfileImage?: string | null;
   onDialogClose: (shouldSave: boolean) => void;
   imgType: "avatar" | "banner";
+  aspect?: number;
+  cropShape?: CropShape;
 };
 
 export const ImgEditor = React.memo(function ImgEditor({
@@ -33,23 +33,9 @@ export const ImgEditor = React.memo(function ImgEditor({
   onDialogClose: onProfileDialogClose,
   imgType = "avatar",
   className,
+  aspect = 1,
+  cropShape,
 }: ImgEditorProps & React.HTMLAttributes<HTMLDivElement>) {
-  const [zoomValue, setZoom] = useState(1);
-  const [cropValue, setCrop] = useState({ x: 0, y: 0 } as Point);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState({
-    width: 0,
-    height: 0,
-    x: 0,
-    y: 0,
-  } as CroppedArea);
-
-  const onCropComplete = useCallback(
-    (_: CroppedArea, croppedAreaPixels: CroppedArea) => {
-      setCroppedAreaPixels(croppedAreaPixels);
-    },
-    [setCroppedAreaPixels],
-  );
-
   const temporaryImageSrc = useMemo(
     () => getAvatarSrc(temporaryProfileImage),
     [temporaryProfileImage],
@@ -85,14 +71,10 @@ export const ImgEditor = React.memo(function ImgEditor({
         setIsOpen={setIsAvatarDialogOpen}
         imageSrc={temporaryImageSrc}
         temporaryProfileImage={temporaryImageSrc}
-        croppedAreaPixels={croppedAreaPixels}
-        zoomValue={zoomValue}
-        setZoom={setZoom}
-        cropValue={cropValue}
-        setCrop={setCrop}
-        onCropComplete={onCropComplete}
         onSaveCropFile={onSaveCropFile}
         onDialogClose={onProfileDialogClose}
+        aspect={aspect}
+        cropShape={cropShape}
       />
     </>
   );

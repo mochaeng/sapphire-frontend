@@ -67,6 +67,7 @@ const EditProfileForm = React.memo(function EditProfileForm({
                   onSaveCropFile={banner.handleSaveCropFile}
                   onDialogClose={banner.handleDialogClose}
                   temporaryProfileImage={banner.temporaryImage}
+                  aspect={4 / 1}
                 />
               </FormControl>
               <FormMessage />
@@ -133,6 +134,8 @@ const AvatarField = React.memo(function AvatarField({
               onSaveCropFile={avatar.handleSaveCropFile}
               onDialogClose={avatar.handleDialogClose}
               temporaryProfileImage={avatar.temporaryImage}
+              aspect={1}
+              cropShape="round"
             />
           </FormControl>
           <FormMessage />

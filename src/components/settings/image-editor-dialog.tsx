@@ -1,11 +1,13 @@
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { ImgSlider } from "./img-slider";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { getAvatarSrc } from "@/lib/utils";
 import { getCroppedImg } from "@/lib/canvas";
 import { CroppedArea } from "@/store/edit-profile-avatar-store";
 import Cropper, { Point } from "react-easy-crop";
+
+export type CropShape = "rect" | "round" | undefined;
 
 type ImageEditorProps = {
   isOpen: boolean;
@@ -13,13 +15,9 @@ type ImageEditorProps = {
   imageSrc?: string;
   onSaveCropFile: (file: File) => void;
   temporaryProfileImage?: string;
-  croppedAreaPixels: CroppedArea;
-  zoomValue: number;
-  setZoom: (value: number) => void;
-  cropValue: Point;
-  setCrop: (value: Point) => void;
   onDialogClose: (shouldSave: boolean) => void;
-  onCropComplete: (_: CroppedArea, croppedArea: CroppedArea) => void;
+  aspect?: number;
+  cropShape?: CropShape;
 };
 
 export const ImageEditorDialog = React.memo(function AvatarDialog({
@@ -27,19 +25,24 @@ export const ImageEditorDialog = React.memo(function AvatarDialog({
   setIsOpen,
   imageSrc,
   temporaryProfileImage,
-  croppedAreaPixels,
-  zoomValue,
-  setZoom,
-  cropValue,
-  setCrop,
   onSaveCropFile,
   onDialogClose,
-  onCropComplete,
+  aspect = 1,
+  cropShape,
 }: ImageEditorProps) {
+  const [zoomValue, setZoom] = useState(1);
+
   const temporaryAvatarSrc = useMemo(
     () => getAvatarSrc(temporaryProfileImage),
     [temporaryProfileImage],
   );
+
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState({
+    width: 0,
+    height: 0,
+    x: 0,
+    y: 0,
+  } as CroppedArea);
 
   const handleSave = useCallback(async () => {
     if (!imageSrc || !croppedAreaPixels) return;
@@ -77,16 +80,14 @@ export const ImageEditorDialog = React.memo(function AvatarDialog({
     >
       <DialogContent className="flex h-full max-h-[800px] w-screen max-w-[600px] flex-col">
         <EditorHeaderDialog />
-        <div className="relative mt-8 flex-1">
-          <ImageCrop
-            imageSrc={temporaryAvatarSrc}
-            cropValue={cropValue}
-            setCrop={setCrop}
-            zoomValue={zoomValue}
-            setZoom={setZoom}
-            onCropComplete={onCropComplete}
-          />
-        </div>
+        <ImageCrop
+          imageSrc={temporaryAvatarSrc}
+          zoomValue={zoomValue}
+          setZoom={setZoom}
+          setCroppedAreaPixels={setCroppedAreaPixels}
+          aspect={aspect}
+          cropShape={cropShape}
+        />
         <div className="flex h-fit flex-col gap-2">
           <ImgSlider text="Zoom" value={zoomValue} setValue={setZoom} />
         </div>
@@ -114,44 +115,56 @@ const SaveButton = React.memo(function ({
 
 const ImageCrop = React.memo(function AvatarCrop({
   imageSrc,
-  cropValue,
-  setCrop,
   zoomValue,
   setZoom,
-  onCropComplete,
+  setCroppedAreaPixels,
+  aspect = 1,
+  cropShape,
 }: {
   imageSrc?: string;
-  cropValue: Point;
-  setCrop: (value: Point) => void;
   zoomValue: number;
   setZoom: (value: number) => void;
-  onCropComplete: (_: CroppedArea, croppedAreaPixels: CroppedArea) => void;
+  setCroppedAreaPixels: (croppedAre: CroppedArea) => void;
+  aspect?: number;
+  cropShape: CropShape;
 }) {
+  const [cropValue, setCrop] = useState({ x: 0, y: 0 } as Point);
+
+  const onCropComplete = useCallback(
+    (_: CroppedArea, croppedAreaPixels: CroppedArea) => {
+      setCroppedAreaPixels(croppedAreaPixels);
+    },
+    [setCroppedAreaPixels],
+  );
+
   return (
-    <Cropper
-      style={{
-        containerStyle: {
-          borderRadius: "8px",
-          // backgroundColor: "black",
-          overflow: "hidden",
-        },
-        cropAreaStyle: {
-          // backgroundColor: "#fff",
-          // boxShadow: "none",
-        },
-        mediaStyle: {
-          objectFit: "cover",
-          // background: "#fff",
-          // mixBlendMode: "normal",
-        },
-      }}
-      image={imageSrc}
-      crop={cropValue}
-      zoom={zoomValue}
-      aspect={1}
-      onCropChange={setCrop}
-      onCropComplete={onCropComplete}
-      onZoomChange={setZoom}
-    />
+    <div className="relative mt-8 flex-1">
+      <Cropper
+        style={{
+          containerStyle: {
+            borderRadius: "8px",
+            // backgroundColor: "black",
+            overflow: "hidden",
+          },
+          cropAreaStyle: {
+            // backgroundColor: "#fff",
+            // boxShadow: "none",
+          },
+          mediaStyle: {
+            objectFit: "cover",
+            // background: "#fff",
+            // mixBlendMode: "normal",
+          },
+        }}
+        image={imageSrc}
+        crop={cropValue}
+        zoom={zoomValue}
+        aspect={aspect}
+        cropShape={cropShape}
+        onCropChange={setCrop}
+        onCropComplete={onCropComplete}
+        onZoomChange={setZoom}
+      />
+    </div>
   );
 });
