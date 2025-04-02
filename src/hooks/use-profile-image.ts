@@ -108,3 +108,5 @@ export function useProfileImage({
     handleDialogClose,
   };
 }
+
+export type UseProfileImageReturn = ReturnType<typeof useProfileImage>;

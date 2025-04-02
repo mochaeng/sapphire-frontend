@@ -108,7 +108,7 @@ const AvatarProfile = React.memo(function AvatarProfile({
   lastName?: string;
 }) {
   return (
-    <Avatar className="size-28">
+    <Avatar className="size-28 border-2 border-white">
       <AvatarImage className="object-cover" src={imgSrc} />
       <AvatarFallback className="bg-secondaryOnlyPlaceholder text-4xl font-bold text-primary">
         {GetNameAcronym(firstName, lastName)}

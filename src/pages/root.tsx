@@ -24,7 +24,7 @@ function Root() {
     return <Outlet />;
   } else {
     return (
-      <div className="mx-auto flex h-full w-full max-w-sapphire lg-1:w-fit lg-2:w-full">
+      <div className="mx-auto flex h-full w-full max-w-sapphire lg-1:max-w-[720px] lg-2:max-w-full">
         <Header />
         <main className="h-full w-full max-w-[1016px]">
           <div className="h-full w-full">
