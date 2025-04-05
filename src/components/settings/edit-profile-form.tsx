@@ -84,7 +84,7 @@ const EditProfileForm = React.memo(function EditProfileForm({
           lastName={profile.last_name}
         />
 
-        <TextFields form={form} profile={profile} isPending={isPending} />
+        <TextFields form={form} isPending={isPending} />
 
         <input
           type="file"
@@ -148,11 +148,11 @@ const AvatarField = React.memo(function AvatarField({
 });
 
 const TextFields = React.memo(function TextFields({
-  profile,
+  // profile,
   form,
   isPending,
 }: {
-  profile: UserProfileInfo;
+  // profile: UserProfileInfo;
   form: UseFormReturn<z.infer<typeof editProfileFormSchema>>;
   isPending: boolean;
 }) {
