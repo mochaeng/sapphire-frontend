@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils";
 import { LucideProps } from "lucide-react";
-import { ForwardRefExoticComponent, RefAttributes } from "react";
+import React, { ForwardRefExoticComponent, RefAttributes } from "react";
 
-export function AddMediaButton({
+export const AddMediaButton = React.memo(function AddMediaButton({
   children,
   disabled,
   className,
@@ -26,9 +26,9 @@ export function AddMediaButton({
       {children}
     </button>
   );
-}
+});
 
-export function ImageMediaButton({
+export const ImageMediaButton = React.memo(function ImageMediaButton({
   Icon,
   disableMediaButtons,
 }: {
@@ -43,4 +43,4 @@ export function ImageMediaButton({
       })}
     />
   );
-}
+});

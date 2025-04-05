@@ -22,7 +22,7 @@ function EditProfileHeader() {
           EDIT PROFILE
         </span>
       </div>
-      <Button className="rounded-full">SAVE</Button>
+      <Button className="rounded-full text-white">SAVE</Button>
     </PageHeader>
   );
 }

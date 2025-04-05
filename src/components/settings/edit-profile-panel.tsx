@@ -5,24 +5,28 @@ import { z } from "zod";
 import EditProfileHeader from "./edit-profile-header";
 import EditProfileForm from "./edit-profile-form";
 import { UserProfileInfo } from "@/lib/api/responses";
+import { cn } from "@/lib/utils";
 
-function ProfileSettingsPanel({ profile }: { profile: UserProfileInfo }) {
+function ProfileSettingsPanel({
+  profile,
+  className,
+}: { profile: UserProfileInfo } & React.HTMLAttributes<HTMLDivElement>) {
   const form = useForm<z.infer<typeof editProfileFormSchema>>({
     resolver: zodResolver(editProfileFormSchema),
     mode: "onSubmit",
     reValidateMode: "onBlur",
     defaultValues: {
-      profileImage: null,
-      bannerImage: null,
-      username: "",
-      bio: "",
-      location: "",
-      website: "",
+      profileImage: profile.avatar_url,
+      bannerImage: profile.banner_url,
+      username: profile.username,
+      bio: profile.description,
+      location: profile.location,
+      website: profile.user_link,
     },
   });
 
   return (
-    <div className="max-w-settingsPage">
+    <div className={cn("max-w-settingsPage", className)}>
       <EditProfileHeader />
       <EditProfileForm profile={profile} form={form} isPending={false} />
     </div>

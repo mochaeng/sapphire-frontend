@@ -1,6 +1,7 @@
 import { X } from "lucide-react";
+import React from "react";
 
-function MediaFormVisualizer({
+const MediaFormVisualizer = React.memo(function MediaFormVisualizer({
   files,
   onRemoveFile,
 }: {
@@ -35,6 +36,6 @@ function MediaFormVisualizer({
       ))}
     </div>
   );
-}
+});
 
 export default MediaFormVisualizer;

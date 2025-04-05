@@ -3,8 +3,9 @@ import BackButton from "../back-button";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { UseFormReturn } from "react-hook-form";
+import React from "react";
 
-function CreateHeader({
+export const CreateHeader = React.memo(function CreateHeader({
   form,
   onSubmit,
   isPending,
@@ -40,6 +41,6 @@ function CreateHeader({
       </button>
     </div>
   );
-}
+});
 
 export default CreateHeader;

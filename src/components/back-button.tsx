@@ -2,8 +2,9 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { ArrowLeft } from "lucide-react";
+import React from "react";
 
-function BackButton({
+export const BackButton = React.memo(function BackButton({
   className,
   ...rest
 }: React.HTMLAttributes<HTMLButtonElement>) {
@@ -22,6 +23,6 @@ function BackButton({
       <ArrowLeft className={cn("!size-6")} />
     </Button>
   );
-}
+});
 
 export default BackButton;

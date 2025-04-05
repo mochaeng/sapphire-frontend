@@ -27,8 +27,8 @@ function ProfilePage() {
   }
 
   return (
-    <div className="flex pb-headerWithOffset md:pb-0">
-      <div className="flex w-full max-w-centerWrapper lg-1:w-[632px]">
+    <div className="flex md:pb-0">
+      <div className="flex w-full max-w-centerWrapper pb-headerWithOffset lg-1:w-[632px] lg-1:border-r-1 lg-2:border-none">
         {data ? <UserProfile profile={data} /> : null}
       </div>
 

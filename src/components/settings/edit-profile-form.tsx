@@ -1,4 +1,7 @@
-import { editProfileFormSchema } from "@/lib/posts-validation";
+import {
+  EditProfileFormMaxLengths,
+  editProfileFormSchema,
+} from "@/lib/posts-validation";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -45,7 +48,6 @@ const EditProfileForm = React.memo(function EditProfileForm({
   return (
     <Form {...form}>
       <form
-        className=""
         encType="multipart/form-data"
         onSubmit={(e) => e.preventDefault()}
         {...props}
@@ -82,7 +84,7 @@ const EditProfileForm = React.memo(function EditProfileForm({
           lastName={profile.last_name}
         />
 
-        <TextFields form={form} isPending={isPending} />
+        <TextFields form={form} profile={profile} isPending={isPending} />
 
         <input
           type="file"
@@ -146,79 +148,134 @@ const AvatarField = React.memo(function AvatarField({
 });
 
 const TextFields = React.memo(function TextFields({
+  profile,
   form,
   isPending,
 }: {
+  profile: UserProfileInfo;
   form: UseFormReturn<z.infer<typeof editProfileFormSchema>>;
   isPending: boolean;
 }) {
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
-
   return (
-    <div className="flex flex-col gap-4 px-4">
+    <div className="flex flex-col gap-4 px-4 text-secondaryOnly">
       <FormField
         control={form.control}
         name="username"
         render={({ field }) => (
-          <FormItem className="mt-4">
+          <FormItem className="relative mt-4">
             <FormLabel>Username</FormLabel>
             <FormControl>
-              <Input {...field} disabled={isPending} />
+              <div className="relative">
+                <Input
+                  className="pl-6"
+                  placeholder="Username"
+                  {...field}
+                  disabled={isPending}
+                />
+                <span className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 transform text-gray-500">
+                  @
+                </span>
+              </div>
             </FormControl>
-            <FormDescription>This is your public name</FormDescription>
+            <FormDescription>
+              https://sapphire.mochaeng.xyz/{field.value}
+            </FormDescription>
             <FormMessage />
           </FormItem>
         )}
       />
 
-      <FormField
-        control={form?.control}
-        name="bio"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Bio</FormLabel>
-            <FormControl>
-              <AutoResizeTextarea
-                {...field}
-                ref={textAreaRef}
-                className="scrollbar overflow-y-auto p-4 !text-mid shadow-none transition duration-200 placeholder:transition-all focus:!outline-none focus:!ring-0 focus:!ring-offset-0 focus:placeholder:opacity-40"
-                placeholder="Compose new post..."
-                maxHeight={150}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
+      <TextFormField
+        type="area"
+        fieldName="bio"
+        form={form}
+        hasCharCount={true}
+        isPending={isPending}
+        title="Bio"
       />
 
-      <FormField
-        control={form.control}
-        name="location"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Location</FormLabel>
-            <FormControl>
-              <Input {...field} disabled={isPending} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
+      <TextFormField
+        fieldName="location"
+        form={form}
+        hasCharCount={true}
+        isPending={isPending}
+        title="Location"
       />
 
-      <FormField
-        control={form.control}
-        name="website"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Your Website URL</FormLabel>
-            <FormControl>
-              <Input {...field} disabled={isPending} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
+      <TextFormField
+        fieldName="website"
+        form={form}
+        hasCharCount={true}
+        isPending={isPending}
+        title="Your Website URL"
       />
     </div>
+  );
+});
+
+const TextFormField = React.memo(function TextFormField({
+  type = "normal",
+  form,
+  isPending,
+  fieldName,
+  title,
+  hasCharCount,
+  description,
+}: {
+  type?: "area" | "normal";
+  form: UseFormReturn<z.infer<typeof editProfileFormSchema>>;
+  isPending: boolean;
+  fieldName: "bio" | "location" | "website";
+  title: string;
+  hasCharCount: boolean;
+  description?: string;
+}) {
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  return (
+    <FormField
+      control={form.control}
+      name={fieldName}
+      render={({ field }) => {
+        const currentLength = form.watch(fieldName)?.length || 0;
+        return (
+          <FormItem>
+            <FormLabel>{title}</FormLabel>
+            <FormControl>
+              <div className="flex flex-col">
+                {type === "area" ? (
+                  <AutoResizeTextarea
+                    {...field}
+                    ref={textAreaRef}
+                    className="scrollbar overflow-y-auto border-custom/25 p-4 !text-mid text-primaryOnly shadow-none transition duration-200 placeholder:transition-all focus:!outline-none focus:!ring-0 focus:!ring-offset-0 focus:placeholder:opacity-40"
+                    placeholder="Write about you"
+                    maxHeight={250}
+                  />
+                ) : (
+                  <>
+                    <Input
+                      {...field}
+                      className="truncate border-custom/25"
+                      disabled={isPending}
+                      maxLength={EditProfileFormMaxLengths[fieldName]}
+                    />
+                  </>
+                )}
+                {hasCharCount ? (
+                  <span className="mt-1 self-end text-sm text-gray-500">
+                    {currentLength}/{EditProfileFormMaxLengths[fieldName]}
+                  </span>
+                ) : null}
+              </div>
+            </FormControl>
+            {description ? (
+              <FormDescription>{description}</FormDescription>
+            ) : null}
+            <FormMessage />
+          </FormItem>
+        );
+      }}
+    />
   );
 });
 

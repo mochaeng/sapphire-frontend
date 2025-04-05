@@ -8,10 +8,11 @@ import { PostCreatePayload } from "@/lib/api/payloads";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useCreatePostFormStore from "@/store/create-post-form-store";
+import React from "react";
 
-function CreatePanel() {
+export const CreatePanel = React.memo(function CreatePanel() {
   const queryClient = useQueryClient();
-  const { setFiles } = useCreatePostFormStore();
+  const setFiles = useCreatePostFormStore((state) => state.setFiles);
 
   const { mutate, isPending } = useMutation({
     mutationFn: fetchCreatePost,
@@ -55,6 +56,6 @@ function CreatePanel() {
       />
     </div>
   );
-}
+});
 
 export default CreatePanel;
